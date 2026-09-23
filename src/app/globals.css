@@ -2507,10 +2507,10 @@ html[data-theme="dark"] .patient-metric-button[aria-pressed="true"] { background
 .followup-table td > span:not(.status) { margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.35; }
 .followup-table td > small { margin-top: 5px; color: var(--faint); font-size: 8px; }
 .followup-table td:last-child { width: 96px; text-align: right; }
-.followup-action { min-height: 34px; padding: 0 9px; display: inline-flex; align-items: center; gap: 6px; color: var(--brand-teal); background: var(--teal-soft); border: 1px solid rgba(14,102,125,.16); border-radius: 9px; cursor: pointer; font-size: 9px; font-weight: 750; }
-.followup-status-active { color: #176648; background: var(--green-soft); }
-.followup-status-paused { color: #96611c; background: var(--amber-soft); }
-.followup-status-completed { color: var(--brand-teal); background: var(--teal-soft); }
+.followup-action { min-height: 34px; padding: 0 9px; display: inline-flex; align-items: center; gap: 6px; color: var(--followup-accent); background: color-mix(in srgb,var(--followup-accent) 10%,var(--surface)); border: 1px solid color-mix(in srgb,var(--followup-accent) 24%,var(--line)); border-radius: 9px; cursor: pointer; font-size: 9px; font-weight: 750; }
+.followup-status-active { color: var(--followup-success-ink); background: var(--green-soft); }
+.followup-status-paused { color: var(--followup-warning-ink); background: var(--amber-soft); }
+.followup-status-completed { color: var(--followup-accent); background: var(--teal-soft); }
 .followup-status-retired { color: var(--muted); background: var(--surface-subtle); }
 .text-danger { color: var(--rose) !important; }.text-warning { color: var(--amber) !important; }
 .followup-empty { min-height: 240px; padding: 28px; display: grid; place-items: center; align-content: center; gap: 8px; color: var(--muted); text-align: center; }
@@ -2541,7 +2541,22 @@ html[data-theme="dark"] .followup-modal-backdrop { background: rgba(0,7,10,.76);
   --followup-accent: #0e667d;
   --followup-accent-strong: #094f62;
   --followup-focus: rgba(14,102,125,.2);
+  --followup-on-accent: #fff;
+  --followup-shimmer: rgba(255,255,255,.55);
+  --followup-success-ink: #176648;
+  --followup-warning-ink: #96611c;
+  --followup-danger-ink: #9c3443;
   gap: 16px;
+}
+html[data-theme="dark"] .followup-page {
+  --followup-accent: #75c5d8;
+  --followup-accent-strong: #94d7e6;
+  --followup-focus: rgba(117,197,216,.28);
+  --followup-on-accent: #06171c;
+  --followup-shimmer: rgba(117,197,216,.18);
+  --followup-success-ink: #a8dce7;
+  --followup-warning-ink: #f0c76e;
+  --followup-danger-ink: #f0a0ab;
 }
 .followup-heading {
   min-height: 116px;
@@ -2594,8 +2609,8 @@ html[data-theme="dark"] .followup-modal-backdrop { background: rgba(0,7,10,.76);
   outline-offset: 2px;
 }
 .followup-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-.followup-btn-primary { color: #fff; background: var(--followup-accent); border-color: var(--followup-accent); box-shadow: 0 7px 16px rgba(14,102,125,.2); }
-.followup-btn-primary:hover { color: #fff; background: var(--followup-accent-strong); border-color: var(--followup-accent-strong); box-shadow: 0 9px 20px rgba(14,102,125,.24); }
+.followup-btn-primary { color: var(--followup-on-accent); background: var(--followup-accent); border-color: var(--followup-accent); box-shadow: 0 7px 16px color-mix(in srgb,var(--followup-accent) 24%,transparent); }
+.followup-btn-primary:hover { color: var(--followup-on-accent); background: var(--followup-accent-strong); border-color: var(--followup-accent-strong); box-shadow: 0 9px 20px color-mix(in srgb,var(--followup-accent) 28%,transparent); }
 .followup-btn-secondary { color: var(--ink); background: var(--surface); }
 .followup-filter-btn { padding-inline: 14px; }
 
@@ -2623,7 +2638,7 @@ html[data-theme="dark"] .followup-modal-backdrop { background: rgba(0,7,10,.76);
 .followup-table-skeleton { display: table-row-group; }
 .followup-skeleton-row:hover { background: transparent !important; }
 .followup-skeleton-line { width: 100%; height: 12px; display: block; overflow: hidden; background: var(--surface-subtle); border-radius: 999px; position: relative; }
-.followup-skeleton-line::after,.followup-pagination-skeleton span::after { position: absolute; inset: 0; content: ""; background: linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent); transform: translateX(-100%); animation: patients-skeleton-shimmer 1.2s infinite; }
+.followup-skeleton-line::after,.followup-pagination-skeleton span::after { position: absolute; inset: 0; content: ""; background: linear-gradient(90deg,transparent,var(--followup-shimmer),transparent); transform: translateX(-100%); animation: patients-skeleton-shimmer 1.2s infinite; }
 .followup-skeleton-row td:nth-child(2n) .followup-skeleton-line { width: 74%; }
 .followup-skeleton-row td:nth-child(3n) .followup-skeleton-line { width: 58%; }
 .followup-pagination-footer { min-height: 70px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--surface-subtle); border-top: 1px solid var(--line); }
@@ -2652,7 +2667,7 @@ html[data-theme="dark"] .followup-modal-backdrop { background: rgba(0,7,10,.76);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-color: rgba(255,255,255,.1);
+  border-color: var(--line-strong);
   border-radius: 20px;
   box-shadow: 0 30px 90px rgba(0,0,0,.32);
   animation: followup-modal-enter .18s ease both;
@@ -2787,6 +2802,7 @@ html[data-theme="dark"] .followup-modal-backdrop { background: rgba(0,7,10,.76);
 .followup-manual-heading strong { font-size: 14px; }
 .followup-manual-heading span { font-size: 12px; }
 .followup-form-error { margin: 12px 0 0; font-size: 13px; }
+.followup-page .form-error { color: var(--followup-danger-ink); }
 .followup-modal-footer {
   position: sticky;
   bottom: 0;
@@ -2818,8 +2834,6 @@ html[data-theme="dark"] .followup-modal-backdrop { background: rgba(0,7,10,.76);
 .followup-create-footer > div svg { flex: 0 0 auto; color: var(--followup-accent); }
 
 html[data-theme="dark"] .followup-heading,html[data-theme="dark"] .followup-worklist,html[data-theme="dark"] .insurer-rules-panel { box-shadow: none; }
-html[data-theme="dark"] .followup-btn-primary { color: #06171c; background: #75c5d8; border-color: #75c5d8; }
-html[data-theme="dark"] .followup-btn-primary:hover { color: #06171c; background: #94d7e6; border-color: #94d7e6; }
 html[data-theme="dark"] .followup-modal-card { border-color: var(--line-strong); }
 
 @media (max-width: 900px) {

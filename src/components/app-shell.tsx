@@ -193,9 +193,19 @@ export function AppShell({
 
   useEffect(() => {
     const restoreTheme = window.setTimeout(() => {
-      const saved = window.localStorage?.getItem("procontra-theme");
+      const applied = document.documentElement.dataset.theme;
+      let saved: string | null = null;
+      try {
+        saved = window.localStorage?.getItem("procontra-theme") ?? null;
+      } catch {
+        // The pre-paint theme remains authoritative when storage is unavailable.
+      }
       const preferred = window.matchMedia?.("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-      setTheme(saved === "dark" || saved === "light" ? saved : preferred);
+      setTheme(applied === "dark" || applied === "light"
+        ? applied
+        : saved === "dark" || saved === "light"
+          ? saved
+          : preferred);
     }, 0);
 
     return () => window.clearTimeout(restoreTheme);
@@ -205,7 +215,11 @@ export function AppShell({
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     document.documentElement.dataset.theme = next;
-    window.localStorage?.setItem("procontra-theme", next);
+    try {
+      window.localStorage?.setItem("procontra-theme", next);
+    } catch {
+      // Theme switching still works when persistence is blocked.
+    }
   };
 
   if (pathname === "/ingresar" || pathname === "/sin-acceso") {

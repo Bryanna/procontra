@@ -78,6 +78,20 @@ describe("AppShell", () => {
     expect(screen.getByRole("button", { name: "Cambiar a modo claro" })).toBeInTheDocument();
   });
 
+  it("keeps the theme control synchronized with the theme already applied before paint", async () => {
+    document.documentElement.dataset.theme = "dark";
+    storage.set("procontra-theme", "light");
+
+    render(<AppShell><p>Contenido</p></AppShell>);
+
+    const toggle = await screen.findByRole("button", { name: "Cambiar a modo claro" });
+    fireEvent.click(toggle);
+
+    expect(document.documentElement.dataset.theme).toBe("light");
+    expect(window.localStorage.getItem("procontra-theme")).toBe("light");
+    expect(screen.getByRole("button", { name: "Cambiar a modo oscuro" })).toBeInTheDocument();
+  });
+
   it("shows the authenticated identity and hides unauthorized modules", () => {
     render(
       <AppShell identity={{

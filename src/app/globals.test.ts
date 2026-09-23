@@ -40,6 +40,18 @@ describe("application typography", () => {
     expect(css).toMatch(/\.followup-pagination-skeleton\s*\{[^}]*display:\s*flex/i);
   });
 
+  it("isolates Programa colors and interaction states between light and dark themes", () => {
+    expect(css).toMatch(/\.followup-page\s*\{[^}]*--followup-accent:\s*#0e667d;[^}]*--followup-on-accent:\s*#fff;[^}]*--followup-shimmer:/i);
+    expect(css).toMatch(/html\[data-theme="dark"\]\s+\.followup-page\s*\{[^}]*--followup-accent:\s*#75c5d8;[^}]*--followup-on-accent:\s*#06171c;[^}]*--followup-shimmer:/i);
+    expect(css).toMatch(/\.followup-action\s*\{[^}]*color:\s*var\(--followup-accent\)[^}]*background:\s*color-mix/i);
+    expect(css).toMatch(/\.followup-btn-primary\s*\{[^}]*color:\s*var\(--followup-on-accent\)[^}]*background:\s*var\(--followup-accent\)/i);
+    expect(css).toMatch(/\.followup-skeleton-line::after[^}]*background:\s*linear-gradient\([^}]*var\(--followup-shimmer\)/i);
+    expect(css).toMatch(/\.followup-modal-card\s*\{[^}]*border-color:\s*var\(--line-strong\)/i);
+    expect(css).toMatch(/\.followup-status-active\s*\{[^}]*color:\s*var\(--followup-success-ink\)/i);
+    expect(css).toMatch(/\.followup-status-paused\s*\{[^}]*color:\s*var\(--followup-warning-ink\)/i);
+    expect(css).toMatch(/\.followup-page\s+\.form-error\s*\{[^}]*color:\s*var\(--followup-danger-ink\)/i);
+  });
+
   it("renders prescription registration as a responsive four-step operational workspace", () => {
     expect(css).not.toMatch(/\.followup-registration-header/);
     expect(css).toMatch(/\.followup-prescription-heading\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*auto minmax\(0,1fr\) auto/i);
