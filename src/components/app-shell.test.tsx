@@ -28,11 +28,7 @@ describe("AppShell", () => {
     const options = [
       "Panel operativo",
       "Pacientes",
-      "Documentos",
-      "Dispensaciones",
       "Inventario",
-      "Continuidad",
-      "Reservas",
       "Mensajería",
       "Programa",
       "Reportes",
@@ -41,6 +37,9 @@ describe("AppShell", () => {
 
     options.forEach((option) => {
       expect(screen.getAllByRole("link", { name: option }).length).toBeGreaterThan(0);
+    });
+    ["Documentos", "Dispensaciones", "Continuidad", "Reservas"].forEach((option) => {
+      expect(screen.queryByRole("link", { name: option })).not.toBeInTheDocument();
     });
     expect(screen.queryByText("Sucursal activa")).not.toBeInTheDocument();
     expect(screen.queryByText("Esperanza 70")).not.toBeInTheDocument();
@@ -64,7 +63,7 @@ describe("AppShell", () => {
     expect(within(bottomNavigation).getByRole("link", { name: "Inicio" })).toHaveAttribute("href", "/");
     expect(within(bottomNavigation).getByRole("link", { name: "Pacientes" })).toHaveAttribute("href", "/pacientes");
     expect(within(bottomNavigation).getByRole("link", { name: "Inventario" })).toHaveAttribute("href", "/inventario");
-    expect(within(bottomNavigation).getByRole("link", { name: "Continuidad" })).toHaveAttribute("href", "/continuidad");
+    expect(within(bottomNavigation).queryByRole("link", { name: "Continuidad" })).not.toBeInTheDocument();
     expect(within(bottomNavigation).getByRole("button", { name: "Más opciones" })).toBeInTheDocument();
   });
 

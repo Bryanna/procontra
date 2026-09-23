@@ -34,17 +34,18 @@ interface NavigationItem {
   href: string;
   icon: LucideIcon;
   permission?: Permission;
+  enabled?: boolean;
   section: "operation" | "management";
 }
 
 export const navigationItems: NavigationItem[] = [
   { label: "Panel operativo", href: "/", icon: LayoutDashboard, section: "operation" },
   { label: "Pacientes", href: "/pacientes", icon: UsersRound, permission: "patients:read", section: "operation" },
-  { label: "Documentos", href: "/documentos", icon: FileScan, permission: "documents:read", section: "operation" },
-  { label: "Dispensaciones", href: "/dispensaciones", icon: ClipboardPlus, permission: "dispensations:read", section: "operation" },
+  { label: "Documentos", href: "/documentos", icon: FileScan, permission: "documents:read", enabled: false, section: "operation" },
+  { label: "Dispensaciones", href: "/dispensaciones", icon: ClipboardPlus, permission: "dispensations:read", enabled: false, section: "operation" },
   { label: "Inventario", href: "/inventario", icon: Boxes, permission: "inventory:read", section: "operation" },
-  { label: "Continuidad", href: "/continuidad", icon: HeartPulse, permission: "continuity:read", section: "operation" },
-  { label: "Reservas", href: "/reservas", icon: PackageCheck, permission: "reservations:read", section: "operation" },
+  { label: "Continuidad", href: "/continuidad", icon: HeartPulse, permission: "continuity:read", enabled: false, section: "operation" },
+  { label: "Reservas", href: "/reservas", icon: PackageCheck, permission: "reservations:read", enabled: false, section: "operation" },
   { label: "Mensajería", href: "/mensajeria", icon: MessageCircleMore, permission: "messaging:read", section: "operation" },
   { label: "Programa", href: "/programa", icon: ClipboardList, permission: "continuity:read", section: "management" },
   { label: "Reportes", href: "/reportes", icon: ChartNoAxesCombined, permission: "reports:read", section: "management" },
@@ -59,7 +60,7 @@ const defaultIdentity: StaffView = {
 };
 
 export function visibleNavigationItems(role: StaffRole): NavigationItem[] {
-  return navigationItems.filter((item) => !item.permission || can(role, item.permission));
+  return navigationItems.filter((item) => item.enabled !== false && (!item.permission || can(role, item.permission)));
 }
 
 function Brand() {
@@ -130,7 +131,6 @@ function BottomNavigation({ role, onMore }: { role: StaffRole; onMore: () => voi
     { label: "Inicio", href: "/", icon: LayoutDashboard, permission: undefined },
     { label: "Pacientes", href: "/pacientes", icon: UsersRound, permission: "patients:read" as Permission },
     { label: "Inventario", href: "/inventario", icon: Boxes, permission: "inventory:read" as Permission },
-    { label: "Continuidad", href: "/continuidad", icon: HeartPulse, permission: "continuity:read" as Permission },
   ].filter((item) => !item.permission || can(role, item.permission));
 
   return (
