@@ -17,7 +17,6 @@ describe("validación de operaciones de seguimiento", () => {
       doctor: "Dra. Ejemplo",
     })).toMatchObject({
       insurerCode: "senasa",
-      prescriptionNumber: "RX-2026-001",
       prescriptionDate: "2026-06-30",
       medicines: "ARACURE 32 MG, LOSARTÁN 50 MG",
       prescriptionItems: [
@@ -27,6 +26,20 @@ describe("validación de operaciones de seguimiento", () => {
       reminderChannels: ["call", "whatsapp"],
       reminderLeadDays: 3,
     });
+  });
+
+  it("ignora cualquier número digitado porque la secuencia se asigna en el servidor", () => {
+    const parsed = parseNewPlanPayload({
+      patientId: "20000000-0000-4000-8000-000000000001",
+      insurerCode: "senasa",
+      firstPurchaseDate: "2026-07-01",
+      prescriptionNumber: "MANUAL-999",
+      prescriptionDate: "2026-07-01",
+      prescriptionItems: [{ medicine: "MEDICAMENTO" }],
+      reminderChannels: ["call"],
+    });
+
+    expect(parsed).not.toHaveProperty("prescriptionNumber");
   });
 
   it("rechaza fechas de compra o receta posteriores al día de ejecución", () => {

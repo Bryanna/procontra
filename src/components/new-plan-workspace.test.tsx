@@ -86,6 +86,25 @@ describe("NewPlanWorkspace", () => {
     expect(screen.queryByLabelText("Medicamento 2")).not.toBeInTheDocument();
   });
 
+  it("muestra una numeración secuencial de seis dígitos y evita controles incrementales", () => {
+    render(<NewPlanWorkspace initialPatients={patients} cancelHref="/programa" actorLabel="Ing. Abel Medrano" branchLabel="Esperanza 70" />);
+    choosePatient();
+    advance();
+
+    const prescriptionNumber = screen.getByLabelText("Número de receta");
+    expect(prescriptionNumber).toHaveAttribute("readonly");
+    expect((prescriptionNumber as HTMLInputElement).value).toMatch(/^RECETA-\d{4}-#{6}$/);
+
+    const quantity = screen.getByLabelText("Cantidad 1");
+    expect(quantity).toHaveAttribute("type", "text");
+    expect(quantity).toHaveAttribute("inputmode", "decimal");
+
+    fireEvent.change(screen.getByLabelText("Modo de programación"), { target: { value: "manual" } });
+    expect(screen.getByLabelText("Cantidad de recetas")).toHaveAttribute("type", "text");
+    expect(screen.getByLabelText("Cantidad de recetas")).toHaveAttribute("inputmode", "numeric");
+    expect(screen.getByLabelText("Receta actual")).toHaveAttribute("type", "text");
+  });
+
   it("configura llamada y WhatsApp y muestra la trazabilidad antes de guardar", () => {
     render(<NewPlanWorkspace initialPatients={patients} cancelHref="/programa" actorLabel="Ing. Abel Medrano" branchLabel="Esperanza 70" />);
     choosePatient();
@@ -115,7 +134,6 @@ describe("NewPlanWorkspace", () => {
     render(<NewPlanWorkspace initialPatients={patients} cancelHref="/programa" actorLabel="Ing. Abel Medrano" branchLabel="Esperanza 70" />);
     choosePatient();
     advance();
-    fireEvent.change(screen.getByLabelText("Número de receta"), { target: { value: "RX-2026-001" } });
     fireEvent.change(screen.getByLabelText("Fecha de receta"), { target: { value: "2026-09-20" } });
     fireEvent.change(screen.getByLabelText("Fecha de primera compra"), { target: { value: "2026-09-20" } });
     fireEvent.change(screen.getByLabelText("Medicamento 1"), { target: { value: "Losartán" } });
@@ -131,7 +149,6 @@ describe("NewPlanWorkspace", () => {
     expect(payload).toMatchObject({
       patientId: patients[0].id,
       insurerCode: "senasa",
-      prescriptionNumber: "RX-2026-001",
       prescriptionDate: "2026-09-20",
       reminderChannels: ["call", "whatsapp"],
       reminderLeadDays: 3,

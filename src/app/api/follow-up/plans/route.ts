@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       p_codigo_ars: input.insurerCode,
       p_fecha_primera_compra: input.firstPurchaseDate,
       p_medicamentos: input.medicines,
-      p_numero_receta: input.prescriptionNumber,
+      p_numero_receta: "AUTO",
       p_fecha_receta: input.prescriptionDate,
       p_items: input.prescriptionItems,
       p_canales_recordatorio: input.reminderChannels,

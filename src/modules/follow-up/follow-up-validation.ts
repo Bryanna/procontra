@@ -52,7 +52,6 @@ export function parseNewPlanPayload(value: unknown) {
   const patientId = text(input.patientId, 36);
   const insurerCode = text(input.insurerCode, 40);
   const firstPurchaseDate = text(input.firstPurchaseDate, 10);
-  const prescriptionNumber = text(input.prescriptionNumber, 100);
   const prescriptionDate = text(input.prescriptionDate, 10);
   const prescriptionItems = parsePrescriptionItems(input.prescriptionItems);
   const medicines = prescriptionItems.map((item) => item.medicine).join(", ").slice(0, 2000);
@@ -65,7 +64,6 @@ export function parseNewPlanPayload(value: unknown) {
   if (!rule) throw new Error("ARS inválida");
   const today = businessDate();
   if (!isIsoDate(firstPurchaseDate) || firstPurchaseDate > today) throw new Error("Fecha de primera compra inválida");
-  if (prescriptionNumber.length < 1) throw new Error("Número de receta requerido");
   if (!isIsoDate(prescriptionDate) || prescriptionDate > today) throw new Error("Fecha de receta inválida");
   if (normalizedReminderChannels.length < 1 || normalizedReminderChannels.some((channel) => !reminderChannelValues.includes(channel as typeof reminderChannelValues[number]))) {
     throw new Error("Canales de recordatorio inválidos");
@@ -83,7 +81,7 @@ export function parseNewPlanPayload(value: unknown) {
     lastPurchaseDate < firstPurchaseDate || nextPurchaseDate < lastPurchaseDate
   )) throw new Error("Programación manual inválida");
   return {
-    patientId, insurerCode, firstPurchaseDate, prescriptionNumber, prescriptionDate,
+    patientId, insurerCode, firstPurchaseDate, prescriptionDate,
     prescriptionItems, medicines,
     reminderChannels: normalizedReminderChannels as (typeof reminderChannelValues[number])[],
     reminderLeadDays: REMINDER_LEAD_DAYS,
