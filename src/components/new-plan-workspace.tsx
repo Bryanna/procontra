@@ -196,11 +196,6 @@ export function NewPlanWorkspace({
   });
 
   return <section className="followup-registration" aria-label="Registro interactivo de receta">
-    <header className="followup-registration-header">
-      <div><span className="eyebrow">RECETA Y CONTINUIDAD</span><h2>Registrar receta del paciente</h2><p>Convierta la receta en un seguimiento operativo con recordatorios por llamada y WhatsApp.</p></div>
-      <span className="followup-registration-policy"><CalendarClock size={18}/><strong>Alerta institucional</strong><small>3 días antes de la próxima compra</small></span>
-    </header>
-
     <nav className="followup-registration-stepper" aria-label="Pasos del registro">{steps.map((item, index) => {
       const Icon = item.icon;
       const complete = index < stepIndex;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowLeft, FileHeart } from "lucide-react";
+import { ArrowLeft, CalendarClock, FileHeart } from "lucide-react";
 import { NewPlanWorkspace } from "@/components/new-plan-workspace";
 import { createSupabaseSessionClient } from "@/infrastructure/supabase/session-client";
 import { getTenantScopeForUser } from "@/infrastructure/supabase/tenant-context-server";
@@ -40,11 +40,12 @@ export default async function NewProgramPage() {
 
   return <div className="page-stack followup-page followup-new-page">
     <section className="page-heading followup-heading followup-prescription-heading">
+      <Link className="followup-back-icon" href="/programa" aria-label="Volver a la agenda"><ArrowLeft size={21} /></Link>
       <div className="followup-heading-copy">
         <span className="followup-hero-icon"><FileHeart size={24} /></span>
         <div><p className="eyebrow">PROGRAMA DE CONTINUIDAD</p><h1>Nueva receta en seguimiento</h1><p className="page-description">Registre la receta, defina los recordatorios y deje preparada la trazabilidad operativa del paciente.</p></div>
       </div>
-      <div className="followup-heading-actions"><Link className="followup-btn followup-btn-secondary" href="/programa"><ArrowLeft size={18} />Volver a la agenda</Link></div>
+      <span className="followup-registration-policy followup-heading-policy"><CalendarClock size={18}/><strong>Alerta institucional</strong><small>3 días antes de la próxima compra</small></span>
     </section>
     <NewPlanWorkspace
       initialPatients={patients}

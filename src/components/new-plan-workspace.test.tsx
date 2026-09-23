@@ -37,13 +37,14 @@ describe("NewPlanWorkspace", () => {
   it("presenta un flujo real de cuatro pasos centrado en la receta", () => {
     render(<NewPlanWorkspace initialPatients={patients} cancelHref="/programa" actorLabel="Ing. Abel Medrano" branchLabel="Esperanza 70" />);
 
-    expect(screen.getByRole("heading", { name: "Registrar receta del paciente" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Registrar receta del paciente" })).not.toBeInTheDocument();
+    expect(screen.queryByText("RECETA Y CONTINUIDAD")).not.toBeInTheDocument();
+    expect(screen.queryByText("Alerta institucional")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "1 Paciente" })).toHaveAttribute("aria-current", "step");
     expect(screen.getByRole("button", { name: "2 Receta" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "3 Alertas" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "4 Revisar" })).toBeDisabled();
     expect(screen.getByText("Paso 1 de 4")).toBeInTheDocument();
-    expect(screen.getByText(/llamada y WhatsApp/i)).toBeInTheDocument();
   });
 
   it("mantiene ocultos los pacientes hasta que el operador empieza a escribir", () => {

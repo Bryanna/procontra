@@ -14,5 +14,9 @@ describe("new follow-up program page", () => {
     expect(source).toContain("actorLabel=");
     expect(source).toContain("branchLabel=");
     expect(source).toContain("pageSize: 8");
+    expect(source).toContain('aria-label="Volver a la agenda"');
+    expect(source).not.toContain(">Volver a la agenda</Link>");
+    expect(source).toContain("Alerta institucional");
+    expect(source).toContain("3 días antes de la próxima compra");
   });
 });

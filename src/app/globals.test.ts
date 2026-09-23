@@ -41,6 +41,9 @@ describe("application typography", () => {
   });
 
   it("renders prescription registration as a responsive four-step operational workspace", () => {
+    expect(css).not.toMatch(/\.followup-registration-header/);
+    expect(css).toMatch(/\.followup-prescription-heading\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*auto minmax\(0,1fr\) auto/i);
+    expect(css).toMatch(/\.followup-back-icon\s*\{[^}]*width:\s*44px[^}]*height:\s*44px/i);
     expect(css).toMatch(/\.followup-registration-layout\s*\{[^}]*grid-template-columns:\s*minmax\(0,1fr\) minmax\(300px,360px\)/i);
     expect(css).toMatch(/\.followup-registration-summary\s*\{[^}]*position:\s*sticky/i);
     expect(css).toMatch(/\.followup-registration-step\[aria-current="step"\]|\.followup-registration-stepper button\[aria-current="step"\]/i);
