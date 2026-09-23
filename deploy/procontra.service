@@ -1,0 +1,19 @@
+[Unit]
+Description=PROCONTRA Next.js Platform
+After=network-online.target docker.service
+Wants=network-online.target docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/InventarioFarmacia/procontra-platform
+Environment=NODE_ENV=production
+Environment=PORT=3001
+ExecStart=/usr/local/bin/node /home/InventarioFarmacia/procontra-platform/node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3001
+Restart=on-failure
+RestartSec=5
+SuccessExitStatus=143
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

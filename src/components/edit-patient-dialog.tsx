@@ -1,0 +1,103 @@
+"use client";
+
+import { useEffect, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import { Building2, Fingerprint, HeartPulse, IdCard, Pencil, Phone, ShieldCheck, X } from "lucide-react";
+import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
+import type { PatientListItem } from "@/modules/patients/patient-catalog";
+import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
+
+export function EditPatientDialog({ patient, branches, onClose }: { patient: PatientListItem; branches: InventoryBranch[]; onClose: () => void }) {
+  const router = useRouter();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const branchId = branches.find((item) => item.code === patient.branchCode)?.id ?? "";
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape" && !busy) onClose(); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
+  }, [busy, onClose]);
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    const form = new FormData(event.currentTarget);
+    const governmentId = String(form.get("governmentId") ?? "");
+    const insuranceCard = String(form.get("insuranceCard") ?? "");
+    const phone = String(form.get("phone") ?? "");
+    const governmentIdDigits = governmentId.replace(/\D/g, "");
+    const phoneDigits = phone.replace(/\D/g, "");
+    try {
+      if (governmentIdDigits && governmentIdDigits.length !== 11) throw new Error("La nueva cédula debe contener 11 dígitos");
+      if (!(phoneDigits.length === 10 || (phoneDigits.length === 11 && phoneDigits.startsWith("1")))) throw new Error("El teléfono debe contener 10 dígitos; puede incluir el código de país +1");
+      let response: Response;
+      try {
+        response = await fetch(`/api/patients/${patient.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: form.get("name"), governmentId, insuranceCard,
+            birthDate: form.get("birthDate"), phone, phoneVerified: form.get("phoneVerified") === "on",
+            insurer: form.get("insurer"), followUpStatus: form.get("followUpStatus"),
+            preferredContactChannel: form.get("preferredContactChannel"), branchId: form.get("branchId"),
+            active: form.get("active") === "active",
+          }),
+        });
+      } catch {
+        throw new Error("No fue posible conectar con el servidor. Intente nuevamente.");
+      }
+      const payload = await response.json().catch(() => ({})) as { error?: string };
+      if (!response.ok) throw new Error(payload.error || "No fue posible actualizar el paciente");
+      onClose();
+      router.refresh();
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "No fue posible actualizar el paciente");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return <div className="product-dialog-backdrop" role="presentation">
+    <section aria-labelledby="edit-patient-title" aria-modal="true" className="product-dialog patient-dialog" role="dialog">
+      <header className="patient-dialog-header"><div className="product-dialog-title"><span><Pencil size={20} /></span><div><p className="section-kicker">EDITAR REGISTRO</p><h2 id="edit-patient-title">Editar paciente {patient.name}</h2><p>Actualice únicamente datos confirmados. La cédula y el carnet actuales permanecen protegidos si deja sus campos vacíos.</p></div></div><button aria-label="Cerrar" className="icon-button" disabled={busy} onClick={onClose} type="button"><X size={18} /></button></header>
+      <form className="patient-registration-form" onSubmit={submit}>
+        <section className="patient-registration-scope" aria-labelledby="edit-patient-scope-title">
+          <div className="patient-section-title"><span><Building2 size={18} /></span><div><h3 id="edit-patient-scope-title">Sucursal e identificación</h3><p>Ubicación operativa del registro.</p></div></div>
+          <div className="patient-scope-grid">
+            <label><span>Sucursal <b>*</b></span><select aria-label="Sucursal" defaultValue={branchId} name="branchId" required><option value="">Seleccione una sucursal</option>{branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name} {branch.code}</option>)}</select></label>
+            <div className="patient-internal-id"><Fingerprint size={19} /><span><strong>ID interno</strong><small>{patient.code}</small></span></div>
+          </div>
+        </section>
+        <section className="patient-registration-section" aria-labelledby="edit-patient-identity-title">
+          <div className="patient-section-title"><span><IdCard size={18} /></span><div><h3 id="edit-patient-identity-title">Datos del paciente</h3><p>Los identificadores nuevos sustituyen los actuales.</p></div></div>
+          <div className="patient-form-grid">
+            <label className="patient-field-wide"><span>Nombre completo <b>*</b></span><input aria-label="Nombre completo" defaultValue={patient.name} maxLength={240} name="name" required /></label>
+            <label><span>Nueva cédula <em>Opcional</em></span><input aria-label="Nueva cédula" inputMode="numeric" maxLength={13} name="governmentId" placeholder="Dejar vacío para conservar" /><small>{patient.governmentIdMask ? `Cédula actual: ${patient.governmentIdMask}` : "Cédula no registrada"}</small></label>
+            <label><span>Fecha de nacimiento <em>Opcional</em></span><input aria-label="Fecha de nacimiento" defaultValue={patient.birthDate ?? ""} max="2099-12-31" min="1900-01-01" name="birthDate" type="date" /></label>
+          </div>
+        </section>
+        <section className="patient-registration-section" aria-labelledby="edit-patient-contact-title">
+          <div className="patient-section-title"><span><Phone size={18} /></span><div><h3 id="edit-patient-contact-title">Contacto y cobertura</h3><p>Información activa para el seguimiento.</p></div></div>
+          <div className="patient-form-grid">
+            <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-label="Teléfono" defaultValue={patient.phone} inputMode="tel" maxLength={18} name="phone" required /><small>10 dígitos; puede incluir +1.</small></label>
+            <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" defaultValue={patient.insurer ?? ""} name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
+            <label><span>Nuevo carnet <em>Opcional</em></span><input aria-label="Nuevo carnet" inputMode="numeric" maxLength={15} name="insuranceCard" placeholder="Dejar vacío para conservar" /><small>{patient.insuranceCardMask ? `Carnet actual: ${patient.insuranceCardMask}` : "Carnet no registrado"}</small></label>
+            <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue={patient.preferredContactChannel} name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>
+            <label><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue={patient.followUpStatus} name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
+            <label><span>Estado del paciente</span><select aria-label="Estado del paciente" defaultValue={patient.active ? "active" : "inactive"} name="active"><option value="active">Activo</option><option value="inactive">Inactivo</option></select></label>
+          </div>
+        </section>
+        <section className="patient-registration-section patient-registration-confirmations" aria-labelledby="edit-patient-validation-title">
+          <div className="patient-section-title"><span><ShieldCheck size={18} /></span><div><h3 id="edit-patient-validation-title">Validación</h3><p>Confirme solo cuando el número haya sido verificado.</p></div></div>
+          <div className="patient-confirmation-grid"><label className="patient-confirmation"><input aria-label="Teléfono verificado" defaultChecked={patient.phoneVerified} name="phoneVerified" type="checkbox" /><span><strong>Teléfono verificado</strong><small>El número pertenece al paciente.</small></span></label></div>
+        </section>
+        {error && <div className="staff-feedback staff-feedback-error" role="alert">{error}</div>}
+        <footer className="patient-dialog-footer"><span><HeartPulse size={16} /> Los cambios actualizarán el registro operativo.</span><div><button className="button button-secondary" disabled={busy} onClick={onClose} type="button">Cancelar</button><button className="button button-primary" disabled={busy} type="submit"><Pencil size={16} /> {busy ? "Guardando…" : "Guardar cambios"}</button></div></footer>
+      </form>
+    </section>
+  </div>;
+}

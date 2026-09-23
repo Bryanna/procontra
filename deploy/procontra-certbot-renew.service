@@ -1,0 +1,8 @@
+[Unit]
+Description=Renew PROCONTRA IP certificate with Certbot
+After=network-online.target nginx.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/root/.local/bin/certbot renew --quiet --deploy-hook /usr/local/sbin/procontra-certbot-reload

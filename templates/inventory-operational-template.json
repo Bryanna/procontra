@@ -1,0 +1,68 @@
+{
+  "sheets": [
+    {
+      "name": "Instrucciones",
+      "rows": [
+        [{"value": "Plantilla de Inventario Operativo PROCONTRA", "bold": true, "font_size": 18, "font_color": "FFFFFF", "fill": "176B4B"}],
+        ["Complete una fila por producto, sucursal y lote. No elimine ni cambie los encabezados de la hoja Carga_Inventario."],
+        [],
+        [{"value": "Campo", "bold": true, "fill": "DCEFE7"}, {"value": "Regla", "bold": true, "fill": "DCEFE7"}],
+        ["CODIGO", "Código existente en el catálogo maestro; conservar ceros iniciales."],
+        ["PRODUCTO", "Descripción del producto según el sistema de farmacia."],
+        ["SUCURSAL", "Usar únicamente 70, 01, 81 o 48."],
+        ["EXISTENCIA", "Cantidad física, número entero mayor o igual a cero."],
+        ["INVENTARIO_MINIMO", "Nivel mínimo aprobado, número entero mayor o igual a cero."],
+        ["LOTE", "Lote físico del producto; una fila por lote."],
+        ["VENCIMIENTO", "Fecha en formato AAAA-MM-DD."],
+        ["COSTO", "Costo unitario, sin símbolo de moneda."],
+        ["PRECIO", "Precio unitario, sin símbolo de moneda."],
+        ["ACTUALIZADO_EN", "Fecha y hora de la fuente, por ejemplo 2026-08-27T18:30:00-04:00."],
+        [],
+        [{"value": "Importante", "bold": true, "font_color": "9C5E13", "fill": "FFF1D6"}, "La plantilla no autoriza compras, traslados ni ajustes. Toda operación requiere aprobación humana."]
+      ],
+      "cells": {
+        "A1": {"value": "Plantilla de Inventario Operativo PROCONTRA", "bold": true, "font_size": 18, "font_color": "FFFFFF", "fill": "176B4B"},
+        "A2": {"value": "Complete una fila por producto, sucursal y lote. No elimine ni cambie los encabezados de la hoja Carga_Inventario.", "wrap": true}
+      },
+      "column_widths": {"A": 26, "B": 90},
+      "row_heights": {"1": 30, "2": 42},
+      "merges": ["A1:B1", "A2:B2"],
+      "freeze_panes": "A4"
+    },
+    {
+      "name": "Carga_Inventario",
+      "rows": [
+        [
+          {"value": "CODIGO", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "PRODUCTO", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "SUCURSAL", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "EXISTENCIA", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "INVENTARIO_MINIMO", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "LOTE", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "VENCIMIENTO", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "COSTO", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "PRECIO", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"},
+          {"value": "ACTUALIZADO_EN", "bold": true, "font_color": "FFFFFF", "fill": "176B4B"}
+        ]
+      ],
+      "column_widths": {"A": 14, "B": 48, "C": 13, "D": 14, "E": 22, "F": 18, "G": 16, "H": 14, "I": 14, "J": 29},
+      "freeze_panes": "A2",
+      "autofilter": "A1:J5000",
+      "validations": [
+        {"range": "C2:C5000", "type": "list", "formula1": "\"70,01,81,48\"", "allow_blank": false},
+        {"range": "D2:E5000", "type": "whole", "formula1": "0", "allow_blank": false},
+        {"range": "H2:I5000", "type": "decimal", "formula1": "0", "allow_blank": false}
+      ]
+    },
+    {
+      "name": "Ejemplo",
+      "rows": [
+        ["CODIGO", "PRODUCTO", "SUCURSAL", "EXISTENCIA", "INVENTARIO_MINIMO", "LOTE", "VENCIMIENTO", "COSTO", "PRECIO", "ACTUALIZADO_EN"],
+        ["004378", "CLODIZOL PLUS/CREMA VAGINAL", "70", 12, 4, "L-2026-01", "2027-06-30", 500.25, 750.10, "2026-08-27T18:30:00-04:00"]
+      ],
+      "column_widths": {"A": 14, "B": 48, "C": 13, "D": 14, "E": 22, "F": 18, "G": 16, "H": 14, "I": 14, "J": 29},
+      "freeze_panes": "A2",
+      "autofilter": "A1:J2"
+    }
+  ]
+}

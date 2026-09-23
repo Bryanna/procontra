@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PROCONTRA Platform
 
-## Getting Started
+Plataforma de continuidad de tratamiento para Farmacia La Línea SRL.
 
-First, run the development server:
+## Estado actual
+
+Esta primera entrega contiene:
+
+- Dashboard operativo responsive.
+- Navegación principal y menú móvil.
+- Módulos de pacientes, documentos, dispensaciones, inventario, continuidad, reservas, mensajería, reportes y administración.
+- Vistas operativas con datos de demostración.
+- Arquitectura preparada para integrar Supabase en la siguiente etapa.
+- Pruebas unitarias con Vitest y Testing Library.
+
+Los datos visibles son demostrativos y no corresponden a pacientes reales.
+
+## Ejecutar localmente
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir `http://localhost:3000` o el puerto indicado por Next.js.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Verificación
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm test
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-## Learn More
+## Estructura principal
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src/
+├── app/                       # Rutas y layouts de Next.js
+├── components/                # AppShell y vistas compartidas
+├── modules/platform/          # Configuración tipada de módulos
+└── test/                      # Configuración de pruebas
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Próxima etapa
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Configurar Supabase local, prueba y producción.
+2. Añadir migraciones para usuarios, roles y sucursales.
+3. Implementar Supabase Auth y políticas RLS.
+4. Sustituir los datos demostrativos por consultas server-only.
+5. Incorporar auditoría y almacenamiento privado de documentos.

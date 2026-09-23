@@ -2,6 +2,8 @@
 
 # dependencies
 /node_modules
+**/__pycache__/
+*.py[cod]
 /.pnp
 .pnp.*
 .yarn/*
@@ -20,6 +22,10 @@
 # production
 /build
 
+# local verification artifacts and database backups
+/artifacts/
+*.dump
+
 # misc
 .DS_Store
 *.pem
@@ -32,6 +38,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.procontra_channel_key
+!.env.example
 
 # vercel
 .vercel
