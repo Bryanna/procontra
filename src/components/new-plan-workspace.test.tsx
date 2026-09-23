@@ -46,6 +46,16 @@ describe("NewPlanWorkspace", () => {
     expect(screen.getByText(/llamada y WhatsApp/i)).toBeInTheDocument();
   });
 
+  it("mantiene ocultos los pacientes hasta que el operador empieza a escribir", () => {
+    render(<NewPlanWorkspace initialPatients={patients} cancelHref="/programa" actorLabel="Ing. Abel Medrano" branchLabel="Esperanza 70" />);
+
+    expect(screen.queryByRole("button", { name: "Seleccionar Ana Pérez" })).not.toBeInTheDocument();
+
+    fireEvent.change(screen.getByRole("searchbox", { name: "Buscar paciente" }), { target: { value: "a" } });
+
+    expect(screen.getByRole("button", { name: "Seleccionar Ana Pérez" })).toBeInTheDocument();
+  });
+
   it("selecciona un paciente canónico y muestra su capacidad de contacto", () => {
     render(<NewPlanWorkspace initialPatients={patients} cancelHref="/programa" actorLabel="Ing. Abel Medrano" branchLabel="Esperanza 70" />);
     choosePatient();
