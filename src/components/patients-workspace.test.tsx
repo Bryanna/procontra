@@ -142,6 +142,6 @@ describe("PatientsWorkspace", () => {
     expect(dialog).toBeInTheDocument();
     expect(within(dialog).getByLabelText("Nombre completo")).toHaveValue("María Rodríguez");
     expect(within(dialog).getByLabelText("Teléfono")).toHaveValue("809-555-0142");
-    expect(within(dialog).getByText("PAC-0001")).toBeInTheDocument();
+    expect(within(dialog).getByText("EDITAR REGISTRO NO. PAC-0001")).toBeInTheDocument();
   });
 });

@@ -2354,7 +2354,6 @@ html[data-theme="dark"] .product-dialog-title > span { color: #d9f5a1; }
 .patient-scope-grid select:focus, .patient-form-grid input:focus, .patient-form-grid select:focus { background: var(--surface); border-color: var(--brand-teal); box-shadow: 0 0 0 3px rgba(14,102,125,.12); }
 .patient-form-grid label > small { color: var(--muted); font-size: 11px; font-weight: 500; line-height: 1.4; }
 .patient-field-wide { grid-column: 1/-1; }
-.patient-scope-wide { grid-column: 1/-1; }
 .patient-active-check { min-height: 46px; margin-top: 24px; padding: 8px 11px; display: flex !important; align-items: center; gap: 10px !important; background: var(--surface-subtle); border: 1px solid var(--line-strong); border-radius: 11px; cursor: pointer; }
 .patient-active-check input { width: 19px; height: 19px; margin: 0; flex: 0 0 auto; accent-color: var(--brand-teal); }
 .patient-active-check > span { display: grid !important; justify-content: start !important; gap: 2px !important; }
@@ -2376,6 +2375,15 @@ html[data-theme="dark"] .product-dialog-title > span { color: #d9f5a1; }
 .patient-dialog-footer > span { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; }
 .patient-dialog-footer > span svg { color: var(--brand-teal); }
 .patient-dialog-footer > div { display: flex; align-items: center; gap: 9px; }
+.patient-dialog-action { min-height: 46px; padding: 0 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 13px; font-weight: 800; cursor: pointer; transition: color .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease; }
+.patient-dialog-action svg { flex: 0 0 auto; }
+.patient-dialog-cancel { color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); box-shadow: 0 4px 12px rgba(20,46,54,.06); }
+.patient-dialog-cancel:hover { color: var(--brand-teal); background: var(--surface-subtle); border-color: color-mix(in srgb,var(--brand-teal) 45%,var(--line)); transform: translateY(-1px); }
+.patient-dialog-save { color: #fff; background: var(--brand-teal); border: 1px solid var(--brand-teal); box-shadow: 0 8px 20px rgba(14,102,125,.22); }
+.patient-dialog-save:hover { background: var(--brand-teal-deep); border-color: var(--brand-teal-deep); box-shadow: 0 10px 24px rgba(14,102,125,.28); transform: translateY(-1px); }
+.patient-dialog-action:active { transform: translateY(0); }
+.patient-dialog-action:focus-visible { outline: 3px solid rgba(14,102,125,.24); outline-offset: 2px; }
+.patient-dialog-action:disabled { opacity: .58; cursor: not-allowed; box-shadow: none; transform: none; }
 .patients-list-panel { overflow: hidden; }
 .patients-query-form { display: grid; grid-template-columns: minmax(300px,1fr) 190px 210px 42px; gap: 10px; align-items: end; padding: 14px 16px; background: var(--surface-subtle); border-bottom: 1px solid var(--line); }
 .patients-query-search { min-height: 44px; padding: 0 13px; display: flex; align-items: center; gap: 9px; color: var(--muted); background: var(--surface); border: 1px solid var(--line-strong); border-radius: 12px; }
@@ -2482,7 +2490,7 @@ html[data-theme="dark"] .patient-metric-button[aria-pressed="true"] { background
   .patient-dialog-header .product-dialog-title h2 { overflow-wrap: anywhere; font-size: 18px; }
   .patient-registration-scope, .patient-registration-section { padding: 12px; gap: 12px; border-radius: 13px; }
   .patient-scope-grid, .patient-form-grid, .patient-form-grid-three { grid-template-columns: 1fr; }
-  .patient-field-wide, .patient-scope-wide { grid-column: auto; }
+  .patient-field-wide { grid-column: auto; }
   .patient-active-check { margin-top: 0; }
   .patient-scope-grid label > span, .patient-form-grid label > span { align-items: flex-start; flex-wrap: wrap; }
 }

@@ -25,6 +25,11 @@ describe("application typography", () => {
     expect(css).toMatch(/@media \(max-width:\s*620px\)[\s\S]*?\.patient-scope-grid[^}]*grid-template-columns:\s*1fr/i);
     expect(css).toMatch(/@media \(max-width:\s*520px\)[\s\S]*?\.patient-dialog-footer\s*>\s*div\s*\{[^}]*grid-template-columns:\s*1fr/i);
     expect(css).toMatch(/\.patient-dialog-footer\s*\{[^}]*position:\s*sticky/i);
+    expect(css).toMatch(/\.patient-dialog-action\s*\{[^}]*min-height:\s*46px[^}]*border-radius:\s*12px/i);
+    expect(css).toMatch(/\.patient-dialog-cancel\s*\{[^}]*background:\s*var\(--surface\)/i);
+    expect(css).toMatch(/\.patient-dialog-save\s*\{[^}]*background:\s*var\(--brand-teal\)/i);
+    expect(css).toMatch(/\.patient-dialog-action:focus-visible\s*\{[^}]*outline:/i);
+    expect(css).toMatch(/\.patient-dialog-action:disabled\s*\{[^}]*cursor:\s*not-allowed/i);
     expect(css).toMatch(/\.patients-editable-row\s*\{[^}]*cursor:\s*pointer/i);
     expect(css).toMatch(/\.patients-editable-row:focus-visible\s*\{[^}]*outline/i);
     expect(css).toMatch(/\.patients-pagination-summary\s*\{[^}]*display:\s*grid/i);

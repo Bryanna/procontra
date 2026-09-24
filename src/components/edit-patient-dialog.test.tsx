@@ -28,11 +28,15 @@ describe("EditPatientDialog", () => {
     const close = vi.fn();
     render(<EditPatientDialog branches={branches} onClose={close} patient={patient} />);
 
+    expect(screen.getByText("EDITAR REGISTRO NO. PAC-0001")).toBeInTheDocument();
+    expect(screen.queryByText("ID interno")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Cancelar" })).toHaveClass("patient-dialog-action", "patient-dialog-cancel");
     expect(screen.queryByLabelText("Teléfono verificado")).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Validación" })).not.toBeInTheDocument();
     expect(screen.getByText("Cédula actual: ***-*******-8")).toBeInTheDocument();
     expect(screen.getByText("Póliza actual: ***6789")).toBeInTheDocument();
     expect(await screen.findByLabelText("Cédula")).toHaveValue("00112345678");
+    expect(screen.getByRole("button", { name: "Guardar cambios" })).toHaveClass("patient-dialog-action", "patient-dialog-save");
     expect(screen.getByLabelText("Póliza")).toHaveValue("1063071401");
     expect(screen.getByLabelText("Cédula")).toHaveAttribute("maxlength", "11");
     expect(screen.getByLabelText("Póliza")).toHaveAttribute("inputmode", "numeric");

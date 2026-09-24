@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, Fingerprint, HeartPulse, IdCard, Pencil, Phone, X } from "lucide-react";
+import { Building2, HeartPulse, IdCard, Pencil, Phone, Save, X } from "lucide-react";
 import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import type { PatientListItem } from "@/modules/patients/patient-catalog";
 import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
@@ -83,14 +83,14 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
 
   return <div className="product-dialog-backdrop" role="presentation">
     <section aria-labelledby="edit-patient-title" aria-modal="true" className="product-dialog patient-dialog" role="dialog">
-      <header className="patient-dialog-header"><div className="product-dialog-title"><span><Pencil size={20} /></span><div><p className="section-kicker">EDITAR REGISTRO</p><h2 id="edit-patient-title">Editar paciente {patient.name}</h2><p>La cédula y la póliza actuales se muestran para su revisión. Cada sustitución conserva el valor anterior cifrado en el historial.</p></div></div><button aria-label="Cerrar" className="icon-button" disabled={busy} onClick={onClose} type="button"><X size={18} /></button></header>
+      <header className="patient-dialog-header"><div className="product-dialog-title"><span><Pencil size={20} /></span><div><p className="section-kicker">EDITAR REGISTRO NO. {patient.code}</p><h2 id="edit-patient-title">Editar paciente {patient.name}</h2><p>La cédula y la póliza actuales se muestran para su revisión. Cada sustitución conserva el valor anterior cifrado en el historial.</p></div></div><button aria-label="Cerrar" className="icon-button" disabled={busy} onClick={onClose} type="button"><X size={18} /></button></header>
       <form className="patient-registration-form" onSubmit={submit}>
         <section className="patient-registration-scope" aria-labelledby="edit-patient-scope-title">
-          <div className="patient-section-title"><span><Building2 size={18} /></span><div><h3 id="edit-patient-scope-title">Sucursal e identificación</h3><p>Ubicación operativa del registro.</p></div></div>
+          <div className="patient-section-title"><span><Building2 size={18} /></span><div><h3 id="edit-patient-scope-title">Sucursal y estado</h3><p>Ubicación operativa y disponibilidad del registro.</p></div></div>
           <div className="patient-scope-grid">
             <label><span>Sucursal <b>*</b></span><select aria-label="Sucursal" defaultValue={branchId} name="branchId" required><option value="">Seleccione una sucursal</option>{branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name} {branch.code}</option>)}</select></label>
             <label className="patient-active-check"><input aria-label="Activo" defaultChecked={patient.active} name="active" type="checkbox" value="active" /><span><strong>Activo</strong><small>Disponible para atención y seguimiento.</small></span></label>
-            <div className="patient-internal-id patient-scope-wide"><Fingerprint size={19} /><span><strong>ID interno</strong><small>{patient.code}</small></span></div>
+
           </div>
         </section>
         <section className="patient-registration-section" aria-labelledby="edit-patient-identity-title">
@@ -112,7 +112,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           </div>
         </section>
         {error && <div className="staff-feedback staff-feedback-error" role="alert">{error}</div>}
-        <footer className="patient-dialog-footer"><span><HeartPulse size={16} /> Los cambios de cédula o póliza quedarán en el historial protegido.</span><div><button className="button button-secondary" disabled={busy} onClick={onClose} type="button">Cancelar</button><button className="button button-primary" disabled={busy || identifiersLoading} type="submit"><Pencil size={16} /> {busy ? "Guardando…" : identifiersLoading ? "Consultando datos…" : "Guardar cambios"}</button></div></footer>
+        <footer className="patient-dialog-footer"><span><HeartPulse size={16} /> Los cambios de cédula o póliza quedarán en el historial protegido.</span><div><button className="patient-dialog-action patient-dialog-cancel" disabled={busy} onClick={onClose} type="button"><X size={16} /> Cancelar</button><button className="patient-dialog-action patient-dialog-save" disabled={busy || identifiersLoading} type="submit"><Save size={16} /> {busy ? "Guardando…" : identifiersLoading ? "Consultando datos…" : "Guardar cambios"}</button></div></footer>
       </form>
     </section>
   </div>;
