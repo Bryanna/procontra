@@ -35,10 +35,30 @@ describe("EditPatientDialog", () => {
     expect(screen.getByLabelText("Cédula")).toHaveAttribute("maxlength", "11");
     expect(screen.getByLabelText("Póliza")).toHaveAttribute("inputmode", "numeric");
 
+    const branch = screen.getByLabelText("Sucursal");
+    const active = screen.getByLabelText("Activo");
+    expect(active).toHaveAttribute("type", "checkbox");
+    expect(branch.closest(".patient-scope-grid")).toBe(active.closest(".patient-scope-grid"));
+    expect(branch.closest("label")?.nextElementSibling).toBe(active.closest("label"));
+
+    const identityRow = screen.getByLabelText("Cédula").closest(".patient-form-grid-three");
+    expect(identityRow).toContainElement(screen.getByLabelText("Póliza"));
+    expect(identityRow).toContainElement(screen.getByLabelText("Fecha de nacimiento"));
+    expect(Array.from(identityRow?.querySelectorAll("input") ?? []).map((input) => input.getAttribute("aria-label"))).toEqual([
+      "Nombre completo", "Cédula", "Póliza", "Fecha de nacimiento",
+    ]);
+
+    const contactRow = screen.getByLabelText("ARS / aseguradora").closest(".patient-form-grid-three");
+    expect(contactRow).toContainElement(screen.getByLabelText("Teléfono"));
+    expect(contactRow).toContainElement(screen.getByLabelText("Canal preferido"));
+    expect(Array.from(contactRow?.querySelectorAll("input, select") ?? []).map((control) => control.getAttribute("aria-label"))).toEqual([
+      "ARS / aseguradora", "Teléfono", "Canal preferido", "Estado de seguimiento",
+    ]);
+
     fireEvent.change(screen.getByLabelText("Cédula"), { target: { value: "402A1234567-8" } });
     fireEvent.change(screen.getByLabelText("Póliza"), { target: { value: "POL-987654321" } });
     fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "809x5550199" } });
-    fireEvent.change(screen.getByLabelText("Estado del paciente"), { target: { value: "inactive" } });
+    fireEvent.click(active);
     fireEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/patients/${patient.id}`, expect.objectContaining({ method: "PATCH" })));

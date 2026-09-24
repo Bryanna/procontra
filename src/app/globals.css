@@ -2345,6 +2345,7 @@ html[data-theme="dark"] .product-dialog-title > span { color: #d9f5a1; }
 .patient-section-title h3 { margin: 1px 0 0; color: var(--ink); font-size: 14px; line-height: 1.35; }
 .patient-section-title p { margin: 5px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
 .patient-scope-grid, .patient-form-grid { min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.patient-form-grid-three { grid-template-columns: repeat(3,minmax(0,1fr)); }
 .patient-scope-grid label, .patient-form-grid label { min-width: 0; display: grid; align-content: start; gap: 7px; color: var(--ink); font-size: 13px; font-weight: 720; }
 .patient-scope-grid label > span, .patient-form-grid label > span { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .patient-scope-grid b, .patient-form-grid b { color: var(--rose); }
@@ -2353,6 +2354,12 @@ html[data-theme="dark"] .product-dialog-title > span { color: #d9f5a1; }
 .patient-scope-grid select:focus, .patient-form-grid input:focus, .patient-form-grid select:focus { background: var(--surface); border-color: var(--brand-teal); box-shadow: 0 0 0 3px rgba(14,102,125,.12); }
 .patient-form-grid label > small { color: var(--muted); font-size: 11px; font-weight: 500; line-height: 1.4; }
 .patient-field-wide { grid-column: 1/-1; }
+.patient-scope-wide { grid-column: 1/-1; }
+.patient-active-check { min-height: 46px; margin-top: 24px; padding: 8px 11px; display: flex !important; align-items: center; gap: 10px !important; background: var(--surface-subtle); border: 1px solid var(--line-strong); border-radius: 11px; cursor: pointer; }
+.patient-active-check input { width: 19px; height: 19px; margin: 0; flex: 0 0 auto; accent-color: var(--brand-teal); }
+.patient-active-check > span { display: grid !important; justify-content: start !important; gap: 2px !important; }
+.patient-active-check strong { color: var(--ink); font-size: 13px; }
+.patient-active-check small { color: var(--muted); font-size: 10px; font-weight: 500; line-height: 1.3; }
 .patient-internal-id { min-height: 70px; padding: 11px 12px; display: flex; align-items: center; gap: 10px; color: var(--brand-teal); background: var(--teal-soft); border: 1px solid rgba(14,102,125,.16); border-radius: 12px; }
 .patient-internal-id > svg { flex: 0 0 auto; }
 .patient-internal-id > span { min-width: 0; display: grid; gap: 4px; }
@@ -2462,8 +2469,10 @@ html[data-theme="dark"] .patient-metric-button[aria-pressed="true"] { background
   .patient-dialog-header .product-dialog-title p:last-child { display: none; }
   .patient-registration-form { padding: 14px 14px 0 !important; }
   .patient-registration-scope, .patient-registration-section { padding: 14px; }
-  .patient-scope-grid, .patient-form-grid, .patient-confirmation-grid { grid-template-columns: 1fr; }
+  .patient-scope-grid, .patient-form-grid, .patient-form-grid-three, .patient-confirmation-grid { grid-template-columns: 1fr; }
   .patient-field-wide { grid-column: auto; }
+  .patient-scope-wide { grid-column: auto; }
+  .patient-active-check { margin-top: 0; }
   .patient-dialog-footer { margin: 14px -14px 0; padding: 12px 14px; }
   .patient-dialog-footer > span { display: none; }
   .patient-dialog-footer > div { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }

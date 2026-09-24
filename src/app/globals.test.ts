@@ -19,6 +19,8 @@ describe("application typography", () => {
     expect(css).toMatch(/\.patients-metric-grid\s*\{[\s\S]*?grid-template-columns:\s*repeat\(5,minmax\(0,1fr\)\)/);
     expect(css).toMatch(/\.patient-metric-button\s*\{[\s\S]*?min-height:\s*76px;/);
     expect(css).toMatch(/\.patient-registration-scope\s*\{[\s\S]*?display:\s*grid;/);
+    expect(css).toMatch(/\.patient-form-grid-three\s*\{[^}]*grid-template-columns:\s*repeat\(3,minmax\(0,1fr\)\)/i);
+    expect(css).toMatch(/\.patient-active-check\s*\{[^}]*min-height:\s*46px[^}]*display:\s*flex/i);
     expect(css).toMatch(/\.patient-dialog-footer\s*\{[^}]*position:\s*sticky/i);
     expect(css).toMatch(/\.patients-editable-row\s*\{[^}]*cursor:\s*pointer/i);
     expect(css).toMatch(/\.patients-editable-row:focus-visible\s*\{[^}]*outline/i);

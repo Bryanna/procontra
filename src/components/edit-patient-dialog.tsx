@@ -89,27 +89,26 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           <div className="patient-section-title"><span><Building2 size={18} /></span><div><h3 id="edit-patient-scope-title">Sucursal e identificación</h3><p>Ubicación operativa del registro.</p></div></div>
           <div className="patient-scope-grid">
             <label><span>Sucursal <b>*</b></span><select aria-label="Sucursal" defaultValue={branchId} name="branchId" required><option value="">Seleccione una sucursal</option>{branches.map((branch) => <option key={branch.id} value={branch.id}>{branch.name} {branch.code}</option>)}</select></label>
-            <div className="patient-internal-id"><Fingerprint size={19} /><span><strong>ID interno</strong><small>{patient.code}</small></span></div>
+            <label className="patient-active-check"><input aria-label="Activo" defaultChecked={patient.active} name="active" type="checkbox" value="active" /><span><strong>Activo</strong><small>Disponible para atención y seguimiento.</small></span></label>
+            <div className="patient-internal-id patient-scope-wide"><Fingerprint size={19} /><span><strong>ID interno</strong><small>{patient.code}</small></span></div>
           </div>
         </section>
         <section className="patient-registration-section" aria-labelledby="edit-patient-identity-title">
           <div className="patient-section-title"><span><IdCard size={18} /></span><div><h3 id="edit-patient-identity-title">Cédula y póliza</h3><p>Puede corregir cualquiera de los dos identificadores; el sistema conservará el valor anterior.</p></div></div>
-          <div className="patient-form-grid">
+          <div className="patient-form-grid patient-form-grid-three">
             <label className="patient-field-wide"><span>Nombre completo <b>*</b></span><input aria-label="Nombre completo" defaultValue={patient.name} maxLength={240} name="name" required /></label>
             <label><span>Cédula <em>11 dígitos</em></span><input aria-label="Cédula" disabled={identifiersLoading} inputMode="numeric" maxLength={11} name="governmentId" onChange={(event) => setGovernmentId(digitsOnly(event.target.value, 11))} placeholder={identifiersLoading ? "Consultando…" : "00112345678"} value={governmentId} /><small>{patient.governmentIdMask ? `Cédula actual: ${patient.governmentIdMask}` : "Cédula no registrada"}</small></label>
-            <label><span>Fecha de nacimiento <em>Opcional</em></span><input aria-label="Fecha de nacimiento" defaultValue={patient.birthDate ?? ""} max="2099-12-31" min="1900-01-01" name="birthDate" type="date" /></label>
             <label><span>Póliza <em>8 a 12 dígitos</em></span><input aria-label="Póliza" disabled={identifiersLoading} inputMode="numeric" maxLength={12} name="insuranceCard" onChange={(event) => setInsurancePolicy(digitsOnly(event.target.value, 12))} placeholder={identifiersLoading ? "Consultando…" : "Número de póliza"} value={insurancePolicy} /><small>{patient.insuranceCardMask ? `Póliza actual: ${patient.insuranceCardMask}` : "Póliza no registrada"}</small></label>
+            <label><span>Fecha de nacimiento <em>Opcional</em></span><input aria-label="Fecha de nacimiento" defaultValue={patient.birthDate ?? ""} max="2099-12-31" min="1900-01-01" name="birthDate" type="date" /></label>
           </div>
         </section>
         <section className="patient-registration-section" aria-labelledby="edit-patient-contact-title">
           <div className="patient-section-title"><span><Phone size={18} /></span><div><h3 id="edit-patient-contact-title">Contacto y cobertura</h3><p>Información activa para el seguimiento.</p></div></div>
-          <div className="patient-form-grid">
-            <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-label="Teléfono" inputMode="numeric" maxLength={12} name="phone" onChange={(event) => setPhone(formatPhoneNumber(event.target.value))} required value={phone} /><small>Digite 10 números; se mostrará como 809-555-0000.</small></label>
+          <div className="patient-form-grid patient-form-grid-three">
             <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" defaultValue={patient.insurer ?? ""} name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
-
+            <label><span>Teléfono <b>*</b></span><input aria-label="Teléfono" inputMode="numeric" maxLength={12} name="phone" onChange={(event) => setPhone(formatPhoneNumber(event.target.value))} required value={phone} /><small>Formato 809-555-0000.</small></label>
             <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue={patient.preferredContactChannel} name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>
-            <label><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue={patient.followUpStatus} name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
-            <label><span>Estado del paciente</span><select aria-label="Estado del paciente" defaultValue={patient.active ? "active" : "inactive"} name="active"><option value="active">Activo</option><option value="inactive">Inactivo</option></select></label>
+            <label className="patient-field-wide"><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue={patient.followUpStatus} name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
           </div>
         </section>
         <section className="patient-registration-section patient-registration-confirmations" aria-labelledby="edit-patient-validation-title">
