@@ -58,12 +58,17 @@ describe("EditPatientDialog", () => {
     expect(contactRow).toContainElement(screen.getByLabelText("Teléfono"));
     expect(contactRow).toContainElement(screen.getByLabelText("Canal preferido"));
     expect(Array.from(contactRow?.querySelectorAll("input, select") ?? []).map((control) => control.getAttribute("aria-label"))).toEqual([
-      "ARS / aseguradora", "Teléfono", "Canal preferido", "Estado de seguimiento",
+      "ARS / aseguradora", "Teléfono", "Canal preferido", "Verde · continuidad organizada",
+      "Amarillo · requiere seguimiento", "Rojo · riesgo de interrupción",
     ]);
+    expect(screen.getByRole("group", { name: "Estado de seguimiento" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Amarillo · requiere seguimiento" })).toBeChecked();
+    expect(screen.queryByText("Escalamiento profesional")).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("Cédula"), { target: { value: "402A1234567-8" } });
     fireEvent.change(screen.getByLabelText("Póliza"), { target: { value: "POL-987654321" } });
     fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "809x5550199" } });
+    fireEvent.click(screen.getByRole("radio", { name: "Rojo · riesgo de interrupción" }));
     fireEvent.click(active);
     fireEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
 
@@ -76,6 +81,7 @@ describe("EditPatientDialog", () => {
       phoneVerified: true,
       governmentId: "40212345678",
       insuranceCard: "987654321",
+      followUpStatus: "red",
     });
     expect(refresh).toHaveBeenCalledOnce();
     expect(close).toHaveBeenCalledOnce();

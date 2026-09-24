@@ -37,4 +37,10 @@ describe("PatientRecordProfile", () => {
     expect(screen.queryByText(/demostrativo/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Losartán/i)).not.toBeInTheDocument();
   });
+
+  it("presents legacy escalation records as interruption risk", () => {
+    render(<PatientRecordProfile patient={{ ...patient, followUpStatus: "clinical" }} />);
+    expect(screen.getByText("Seguimiento rojo")).toBeInTheDocument();
+    expect(screen.queryByText("Escalamiento profesional")).not.toBeInTheDocument();
+  });
 });

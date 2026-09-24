@@ -6,6 +6,7 @@ import { Building2, Fingerprint, HeartPulse, IdCard, Phone, Plus, ShieldCheck, U
 import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
 import { digitsOnly, formatPhoneNumber } from "@/shared/contact-format";
+import { PatientFollowUpField } from "./patient-follow-up-field";
 
 export function NewPatientDialog({ branches }: { branches: InventoryBranch[] }) {
   const router = useRouter();
@@ -97,7 +98,7 @@ export function NewPatientDialog({ branches }: { branches: InventoryBranch[] }) 
               <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
               <label><span>Carnet <em>Opcional</em></span><input aria-label="Carnet" autoComplete="off" inputMode="numeric" maxLength={15} name="insuranceCard" placeholder="Número de carnet" /><small>Debe contener de 8 a 12 dígitos.</small></label>
               <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue="whatsapp" name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>
-              <label><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue="green" name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
+              <PatientFollowUpField />
             </div>
           </section>
 

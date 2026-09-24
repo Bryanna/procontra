@@ -41,7 +41,10 @@ describe("NewPatientDialog", () => {
     expect(phone).toHaveValue("809-555-0101");
     fireEvent.click(screen.getByRole("checkbox", { name: "Teléfono verificado" }));
     fireEvent.change(screen.getByLabelText("ARS / aseguradora"), { target: { value: "ARS SENASA" } });
-    fireEvent.change(screen.getByLabelText("Estado de seguimiento"), { target: { value: "yellow" } });
+    expect(screen.getByRole("group", { name: "Estado de seguimiento" })).toBeInTheDocument();
+    expect(screen.queryByText("Escalamiento profesional")).not.toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Verde · continuidad organizada" })).toBeChecked();
+    fireEvent.click(screen.getByRole("radio", { name: "Amarillo · requiere seguimiento" }));
     fireEvent.change(screen.getByLabelText("Canal preferido"), { target: { value: "call" } });
     fireEvent.click(screen.getByRole("checkbox", { name: "Consentimiento vigente" }));
     fireEvent.click(screen.getByRole("button", { name: "Guardar paciente" }));

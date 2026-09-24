@@ -5,7 +5,7 @@ import { formatPhoneNumber } from "@/shared/contact-format";
 
 export function PatientRecordProfile({ patient }: { patient: PatientListItem }) {
   const initials = patient.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
-  const followUpLabels = { green: "Seguimiento verde", yellow: "Seguimiento amarillo", red: "Seguimiento rojo", clinical: "Escalamiento profesional" } as const;
+  const followUpLabels = { green: "Seguimiento verde", yellow: "Seguimiento amarillo", red: "Seguimiento rojo", clinical: "Seguimiento rojo" } as const;
   const channelLabel = patient.preferredContactChannel === "call" ? "Llamada" : "WhatsApp";
   return (
     <div className="page-stack patient-page">

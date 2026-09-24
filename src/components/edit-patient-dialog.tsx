@@ -7,6 +7,7 @@ import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import type { PatientListItem } from "@/modules/patients/patient-catalog";
 import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
 import { digitsOnly, formatPhoneNumber } from "@/shared/contact-format";
+import { PatientFollowUpField } from "./patient-follow-up-field";
 
 export function EditPatientDialog({ patient, branches, onClose }: { patient: PatientListItem; branches: InventoryBranch[]; onClose: () => void }) {
   const router = useRouter();
@@ -108,7 +109,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
             <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" defaultValue={patient.insurer ?? ""} name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
             <label><span>Teléfono <b>*</b></span><input aria-label="Teléfono" inputMode="numeric" maxLength={12} name="phone" onChange={(event) => setPhone(formatPhoneNumber(event.target.value))} required value={phone} /><small>Formato 809-555-0000.</small></label>
             <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue={patient.preferredContactChannel} name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>
-            <label className="patient-field-wide"><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue={patient.followUpStatus} name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
+            <PatientFollowUpField defaultValue={patient.followUpStatus} />
           </div>
         </section>
         {error && <div className="staff-feedback staff-feedback-error" role="alert">{error}</div>}

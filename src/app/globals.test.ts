@@ -30,6 +30,11 @@ describe("application typography", () => {
     expect(css).toMatch(/\.patient-dialog-save\s*\{[^}]*background:\s*var\(--brand-teal\)/i);
     expect(css).toMatch(/\.patient-dialog-action:focus-visible\s*\{[^}]*outline:/i);
     expect(css).toMatch(/\.patient-dialog-action:disabled\s*\{[^}]*cursor:\s*not-allowed/i);
+    expect(css).toMatch(/\.patient-followup-options\s*\{[^}]*grid-template-columns:\s*repeat\(3,minmax\(0,1fr\)\)/i);
+    expect(css).toMatch(/\.patient-followup-green:has\(input:checked\)\s*\{[^}]*border-color:\s*#(?:[0-9a-f]{3}|[0-9a-f]{6})/i);
+    expect(css).toMatch(/\.patient-followup-yellow:has\(input:checked\)\s*\{[^}]*border-color:\s*#(?:[0-9a-f]{3}|[0-9a-f]{6})/i);
+    expect(css).toMatch(/\.patient-followup-red:has\(input:checked\)\s*\{[^}]*border-color:\s*#(?:[0-9a-f]{3}|[0-9a-f]{6})/i);
+    expect(css).toMatch(/@media \(max-width:\s*620px\)[\s\S]*?\.patient-followup-options\s*\{[^}]*grid-template-columns:\s*1fr/i);
     expect(css).toMatch(/\.patients-editable-row\s*\{[^}]*cursor:\s*pointer/i);
     expect(css).toMatch(/\.patients-editable-row:focus-visible\s*\{[^}]*outline/i);
     expect(css).toMatch(/\.patients-pagination-summary\s*\{[^}]*display:\s*grid/i);

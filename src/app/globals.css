@@ -2371,6 +2371,26 @@ html[data-theme="dark"] .product-dialog-title > span { color: #d9f5a1; }
 .patient-confirmation > span { display: grid; gap: 4px; }
 .patient-confirmation strong { color: var(--ink); font-size: 13px; }
 .patient-confirmation small { color: var(--muted); font-size: 11px; line-height: 1.4; }
+.patient-followup-field { min-width: 0; margin: 0; padding: 0; border: 0; }
+.patient-followup-field legend { margin-bottom: 8px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.patient-followup-options { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; }
+.patient-followup-option { position: relative; min-width: 0; min-height: 76px; padding: 12px; display: grid; grid-template-columns: 18px 10px minmax(0,1fr); align-items: center; gap: 9px; color: var(--muted); background: var(--surface-subtle); border: 1px solid var(--line); border-radius: 13px; cursor: pointer; transition: color .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease; }
+.patient-followup-option:hover { border-color: var(--line-strong); box-shadow: 0 5px 15px rgba(20,46,54,.07); transform: translateY(-1px); }
+.patient-followup-option input { width: 18px; height: 18px; margin: 0; cursor: pointer; }
+.patient-followup-option > i { width: 10px; height: 10px; border-radius: 999px; box-shadow: 0 0 0 4px color-mix(in srgb,currentColor 13%,transparent); }
+.patient-followup-option > span { min-width: 0; display: grid; gap: 3px; }
+.patient-followup-option strong { color: var(--ink); font-size: 13px; }
+.patient-followup-option small { color: inherit; font-size: 10px; line-height: 1.35; }
+.patient-followup-option:focus-within { outline: 3px solid rgba(14,102,125,.2); outline-offset: 2px; }
+.patient-followup-green { color: #23825e; }
+.patient-followup-yellow { color: #9b6b18; }
+.patient-followup-red { color: #a23d4b; }
+.patient-followup-green input { accent-color: #23825e; }
+.patient-followup-yellow input { accent-color: #b77b18; }
+.patient-followup-red input { accent-color: #bd4655; }
+.patient-followup-green:has(input:checked) { border-color: #23825e; background: color-mix(in srgb,#e8f7f0 78%,var(--surface)); box-shadow: 0 0 0 2px rgba(35,130,94,.1); }
+.patient-followup-yellow:has(input:checked) { border-color: #b77b18; background: color-mix(in srgb,#fff4d8 78%,var(--surface)); box-shadow: 0 0 0 2px rgba(183,123,24,.1); }
+.patient-followup-red:has(input:checked) { border-color: #bd4655; background: color-mix(in srgb,#fbe8eb 78%,var(--surface)); box-shadow: 0 0 0 2px rgba(189,70,85,.1); }
 .patient-dialog-footer { position: sticky; bottom: 0; z-index: 3; min-height: 76px; margin: 18px -20px 0; padding: 13px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: color-mix(in srgb,var(--surface) 94%,transparent); border-top: 1px solid var(--line); box-shadow: 0 -8px 20px rgba(20,46,54,.05); backdrop-filter: blur(14px); }
 .patient-dialog-footer > span { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; }
 .patient-dialog-footer > span svg { color: var(--brand-teal); }
@@ -2491,6 +2511,7 @@ html[data-theme="dark"] .patient-metric-button[aria-pressed="true"] { background
   .patient-registration-scope, .patient-registration-section { padding: 12px; gap: 12px; border-radius: 13px; }
   .patient-scope-grid, .patient-form-grid, .patient-form-grid-three { grid-template-columns: 1fr; }
   .patient-field-wide { grid-column: auto; }
+  .patient-followup-options { grid-template-columns: 1fr; }
   .patient-active-check { margin-top: 0; }
   .patient-scope-grid label > span, .patient-form-grid label > span { align-items: flex-start; flex-wrap: wrap; }
 }
