@@ -156,7 +156,7 @@ export function PatientsWorkspace({
           </nav>}
         </div>
       </section>
-      {editingPatient && <EditPatientDialog branches={branches} onClose={() => setEditingPatient(null)} patient={editingPatient} />}
+      {editingPatient && <EditPatientDialog branches={branches} key={editingPatient.id} onClose={() => setEditingPatient(null)} patient={editingPatient} />}
     </div>
   );
 }

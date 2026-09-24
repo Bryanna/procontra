@@ -17,25 +17,39 @@ const patient = {
 describe("EditPatientDialog", () => {
   afterEach(() => { vi.unstubAllGlobals(); refresh.mockReset(); });
 
-  it("updates the selected patient without replacing protected identifiers left blank", async () => {
-    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ id: patient.id }) });
+  it("shows current cédula and policy, allows changes and keeps their protected masks visible", async () => {
+    const fetchMock = vi.fn().mockImplementation((_url: string, options?: RequestInit) => Promise.resolve({
+      ok: true,
+      json: async () => options?.method === "PATCH"
+        ? { id: patient.id }
+        : { governmentId: "00112345678", insurancePolicy: "1063071401" },
+    }));
     vi.stubGlobal("fetch", fetchMock);
     const close = vi.fn();
     render(<EditPatientDialog branches={branches} onClose={close} patient={patient} />);
+
     expect(screen.getByText("Cédula actual: ***-*******-8")).toBeInTheDocument();
-    expect(screen.getByText("Carnet actual: ***6789")).toBeInTheDocument();
-    const insurerField = screen.getByLabelText("ARS / aseguradora");
-    const cardField = screen.getByLabelText("Nuevo carnet");
-    expect(insurerField.closest("label")?.nextElementSibling).toBe(cardField.closest("label"));
-    expect(screen.queryByText(/NSS/i)).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Teléfono")).toHaveValue("809-555-0142");
+    expect(screen.getByText("Póliza actual: ***6789")).toBeInTheDocument();
+    expect(await screen.findByLabelText("Cédula")).toHaveValue("00112345678");
+    expect(screen.getByLabelText("Póliza")).toHaveValue("1063071401");
+    expect(screen.getByLabelText("Cédula")).toHaveAttribute("maxlength", "11");
+    expect(screen.getByLabelText("Póliza")).toHaveAttribute("inputmode", "numeric");
+
+    fireEvent.change(screen.getByLabelText("Cédula"), { target: { value: "402A1234567-8" } });
+    fireEvent.change(screen.getByLabelText("Póliza"), { target: { value: "POL-987654321" } });
     fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "809x5550199" } });
-    expect(screen.getByLabelText("Teléfono")).toHaveValue("809-555-0199");
     fireEvent.change(screen.getByLabelText("Estado del paciente"), { target: { value: "inactive" } });
     fireEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
+
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/patients/${patient.id}`, expect.objectContaining({ method: "PATCH" })));
-    const body = JSON.parse(fetchMock.mock.calls[0][1].body);
-    expect(body).toMatchObject({ phone: "809-555-0199", active: false, governmentId: "", insuranceCard: "" });
+    const patchCall = fetchMock.mock.calls.find(([, options]) => options?.method === "PATCH");
+    const body = JSON.parse(patchCall?.[1]?.body as string);
+    expect(body).toMatchObject({
+      phone: "809-555-0199",
+      active: false,
+      governmentId: "40212345678",
+      insuranceCard: "987654321",
+    });
     expect(refresh).toHaveBeenCalledOnce();
     expect(close).toHaveBeenCalledOnce();
   });

@@ -13,6 +13,8 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [governmentId, setGovernmentId] = useState("");
+  const [insurancePolicy, setInsurancePolicy] = useState("");
+  const [identifiersLoading, setIdentifiersLoading] = useState(true);
   const [phone, setPhone] = useState(() => formatPhoneNumber(patient.phone));
   const branchId = branches.find((item) => item.code === patient.branchCode)?.id ?? "";
 
@@ -23,6 +25,21 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
     window.addEventListener("keydown", closeOnEscape);
     return () => { document.body.style.overflow = previousOverflow; window.removeEventListener("keydown", closeOnEscape); };
   }, [busy, onClose]);
+
+  useEffect(() => {
+    let active = true;
+    fetch(`/api/patients/${patient.id}`)
+      .then(async (response) => {
+        const payload = await response.json() as { error?: string; governmentId?: string; insurancePolicy?: string };
+        if (!response.ok) throw new Error(payload.error || "No fue posible consultar los identificadores");
+        if (!active) return;
+        setGovernmentId(digitsOnly(payload.governmentId, 11));
+        setInsurancePolicy(digitsOnly(payload.insurancePolicy, 12));
+      })
+      .catch((caught) => { if (active) setError(caught instanceof Error ? caught.message : "No fue posible consultar los identificadores"); })
+      .finally(() => { if (active) setIdentifiersLoading(false); });
+    return () => { active = false; };
+  }, [patient.id]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -66,7 +83,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
 
   return <div className="product-dialog-backdrop" role="presentation">
     <section aria-labelledby="edit-patient-title" aria-modal="true" className="product-dialog patient-dialog" role="dialog">
-      <header className="patient-dialog-header"><div className="product-dialog-title"><span><Pencil size={20} /></span><div><p className="section-kicker">EDITAR REGISTRO</p><h2 id="edit-patient-title">Editar paciente {patient.name}</h2><p>Actualice únicamente datos confirmados. La cédula y el carnet actuales permanecen protegidos si deja sus campos vacíos.</p></div></div><button aria-label="Cerrar" className="icon-button" disabled={busy} onClick={onClose} type="button"><X size={18} /></button></header>
+      <header className="patient-dialog-header"><div className="product-dialog-title"><span><Pencil size={20} /></span><div><p className="section-kicker">EDITAR REGISTRO</p><h2 id="edit-patient-title">Editar paciente {patient.name}</h2><p>La cédula y la póliza actuales se muestran para su revisión. Cada sustitución conserva el valor anterior cifrado en el historial.</p></div></div><button aria-label="Cerrar" className="icon-button" disabled={busy} onClick={onClose} type="button"><X size={18} /></button></header>
       <form className="patient-registration-form" onSubmit={submit}>
         <section className="patient-registration-scope" aria-labelledby="edit-patient-scope-title">
           <div className="patient-section-title"><span><Building2 size={18} /></span><div><h3 id="edit-patient-scope-title">Sucursal e identificación</h3><p>Ubicación operativa del registro.</p></div></div>
@@ -76,11 +93,12 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           </div>
         </section>
         <section className="patient-registration-section" aria-labelledby="edit-patient-identity-title">
-          <div className="patient-section-title"><span><IdCard size={18} /></span><div><h3 id="edit-patient-identity-title">Datos del paciente</h3><p>Los identificadores nuevos sustituyen los actuales.</p></div></div>
+          <div className="patient-section-title"><span><IdCard size={18} /></span><div><h3 id="edit-patient-identity-title">Cédula y póliza</h3><p>Puede corregir cualquiera de los dos identificadores; el sistema conservará el valor anterior.</p></div></div>
           <div className="patient-form-grid">
             <label className="patient-field-wide"><span>Nombre completo <b>*</b></span><input aria-label="Nombre completo" defaultValue={patient.name} maxLength={240} name="name" required /></label>
-            <label><span>Nueva cédula <em>Opcional</em></span><input aria-label="Nueva cédula" inputMode="numeric" maxLength={11} name="governmentId" onChange={(event) => setGovernmentId(digitsOnly(event.target.value, 11))} placeholder="Dejar vacío para conservar" value={governmentId} /><small>{patient.governmentIdMask ? `Cédula actual: ${patient.governmentIdMask}` : "Cédula no registrada"}</small></label>
+            <label><span>Cédula <em>11 dígitos</em></span><input aria-label="Cédula" disabled={identifiersLoading} inputMode="numeric" maxLength={11} name="governmentId" onChange={(event) => setGovernmentId(digitsOnly(event.target.value, 11))} placeholder={identifiersLoading ? "Consultando…" : "00112345678"} value={governmentId} /><small>{patient.governmentIdMask ? `Cédula actual: ${patient.governmentIdMask}` : "Cédula no registrada"}</small></label>
             <label><span>Fecha de nacimiento <em>Opcional</em></span><input aria-label="Fecha de nacimiento" defaultValue={patient.birthDate ?? ""} max="2099-12-31" min="1900-01-01" name="birthDate" type="date" /></label>
+            <label><span>Póliza <em>8 a 12 dígitos</em></span><input aria-label="Póliza" disabled={identifiersLoading} inputMode="numeric" maxLength={12} name="insuranceCard" onChange={(event) => setInsurancePolicy(digitsOnly(event.target.value, 12))} placeholder={identifiersLoading ? "Consultando…" : "Número de póliza"} value={insurancePolicy} /><small>{patient.insuranceCardMask ? `Póliza actual: ${patient.insuranceCardMask}` : "Póliza no registrada"}</small></label>
           </div>
         </section>
         <section className="patient-registration-section" aria-labelledby="edit-patient-contact-title">
@@ -88,7 +106,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           <div className="patient-form-grid">
             <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-label="Teléfono" inputMode="numeric" maxLength={12} name="phone" onChange={(event) => setPhone(formatPhoneNumber(event.target.value))} required value={phone} /><small>Digite 10 números; se mostrará como 809-555-0000.</small></label>
             <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" defaultValue={patient.insurer ?? ""} name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
-            <label><span>Nuevo carnet <em>Opcional</em></span><input aria-label="Nuevo carnet" inputMode="numeric" maxLength={15} name="insuranceCard" placeholder="Dejar vacío para conservar" /><small>{patient.insuranceCardMask ? `Carnet actual: ${patient.insuranceCardMask}` : "Carnet no registrado"}</small></label>
+
             <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue={patient.preferredContactChannel} name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>
             <label><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue={patient.followUpStatus} name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
             <label><span>Estado del paciente</span><select aria-label="Estado del paciente" defaultValue={patient.active ? "active" : "inactive"} name="active"><option value="active">Activo</option><option value="inactive">Inactivo</option></select></label>
@@ -99,7 +117,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           <div className="patient-confirmation-grid"><label className="patient-confirmation"><input aria-label="Teléfono verificado" defaultChecked={patient.phoneVerified} name="phoneVerified" type="checkbox" /><span><strong>Teléfono verificado</strong><small>El número pertenece al paciente.</small></span></label></div>
         </section>
         {error && <div className="staff-feedback staff-feedback-error" role="alert">{error}</div>}
-        <footer className="patient-dialog-footer"><span><HeartPulse size={16} /> Los cambios actualizarán el registro operativo.</span><div><button className="button button-secondary" disabled={busy} onClick={onClose} type="button">Cancelar</button><button className="button button-primary" disabled={busy} type="submit"><Pencil size={16} /> {busy ? "Guardando…" : "Guardar cambios"}</button></div></footer>
+        <footer className="patient-dialog-footer"><span><HeartPulse size={16} /> Los cambios de cédula o póliza quedarán en el historial protegido.</span><div><button className="button button-secondary" disabled={busy} onClick={onClose} type="button">Cancelar</button><button className="button button-primary" disabled={busy || identifiersLoading} type="submit"><Pencil size={16} /> {busy ? "Guardando…" : identifiersLoading ? "Consultando datos…" : "Guardar cambios"}</button></div></footer>
       </form>
     </section>
   </div>;
