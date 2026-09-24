@@ -28,6 +28,7 @@ describe("AppShell", () => {
     const options = [
       "Panel operativo",
       "Pacientes",
+      "Documentos",
       "Inventario",
       "Mensajería",
       "Programa",
@@ -38,7 +39,7 @@ describe("AppShell", () => {
     options.forEach((option) => {
       expect(screen.getAllByRole("link", { name: option }).length).toBeGreaterThan(0);
     });
-    ["Documentos", "Dispensaciones", "Continuidad", "Reservas"].forEach((option) => {
+    ["Dispensaciones", "Continuidad", "Reservas"].forEach((option) => {
       expect(screen.queryByRole("link", { name: option })).not.toBeInTheDocument();
     });
     expect(screen.queryByText("Sucursal activa")).not.toBeInTheDocument();

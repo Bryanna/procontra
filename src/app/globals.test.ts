@@ -52,6 +52,14 @@ describe("application typography", () => {
     expect(css).toMatch(/\.followup-page\s+\.form-error\s*\{[^}]*color:\s*var\(--followup-danger-ink\)/i);
   });
 
+  it("lays out document authorization review for desktop and phone operation", () => {
+    expect(css).toMatch(/\.authorization-fields\s*\{[^}]*grid-template-columns:/i);
+    expect(css).toMatch(/\.authorization-confirmations\s*\{[^}]*display:\s*grid/i);
+    expect(css).toMatch(/\.authorization-confirmations label\s*\{[^}]*min-height:\s*44px/i);
+    expect(css).toMatch(/\.authorization-line-editor\s*\{[^}]*grid-template-columns:/i);
+    expect(css).toMatch(/@media \(max-width:\s*680px\)[\s\S]*?\.authorization-confirmations\s*\{[^}]*grid-template-columns:\s*1fr/i);
+  });
+
   it("renders prescription registration as a responsive four-step operational workspace", () => {
     expect(css).not.toMatch(/\.followup-registration-header/);
     expect(css).toMatch(/\.followup-prescription-heading\s*\{[^}]*display:\s*grid[^}]*grid-template-columns:\s*auto minmax\(0,1fr\) auto/i);

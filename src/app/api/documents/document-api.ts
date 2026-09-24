@@ -18,7 +18,7 @@ export async function requireDocumentWrite() {
 
 export function documentApiError(error: unknown) {
   const raw = error instanceof Error ? error.message : "";
-  const known = ["Tipo de documento inválido", "Imagen de factura inválida", "Sucursal inválida", "Renglón de factura inválido", "Renglones de factura requeridos", "Revisor de documentos requerido", "Decisión inválida", "Producto inválido", "Aprobador de inventario requerido", "Factura requiere revisión", "Lote y vencimiento requeridos", "Dispensación requiere autorización vinculada"];
+  const known = ["Tipo de documento inválido", "Imagen de factura inválida", "Sucursal inválida", "Renglón de factura inválido", "Renglones de factura requeridos", "Revisor de documentos requerido", "Decisión inválida", "Producto inválido", "Aprobador de inventario requerido", "Factura requiere revisión", "Lote y vencimiento requeridos", "Dispensación requiere autorización vinculada", "Canal de documento inválido", "Documento de autorización inválido", "Estado autorizado requerido", "Uso continuo requerido", "Consentimiento de seguimiento requerido", "Fecha de autorización inválida", "Nombre de paciente inválido", "Teléfono de paciente inválido", "Cédula de paciente inválida", "Carnet de paciente inválido", "Número de autorización requerido", "Medicamentos autorizados inválidos", "Canales de recordatorio inválidos", "ARS no configurada", "Configuración de seguridad no disponible"];
   const message = known.find((value) => raw.includes(value));
-  return NextResponse.json({ error: message ?? "No fue posible procesar la factura" }, { status: message ? 400 : 500 });
+  return NextResponse.json({ error: message ?? "No fue posible procesar el documento" }, { status: message ? 400 : 500 });
 }

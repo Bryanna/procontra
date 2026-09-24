@@ -41,7 +41,7 @@ interface NavigationItem {
 export const navigationItems: NavigationItem[] = [
   { label: "Panel operativo", href: "/", icon: LayoutDashboard, section: "operation" },
   { label: "Pacientes", href: "/pacientes", icon: UsersRound, permission: "patients:read", section: "operation" },
-  { label: "Documentos", href: "/documentos", icon: FileScan, permission: "documents:read", enabled: false, section: "operation" },
+  { label: "Documentos", href: "/documentos", icon: FileScan, permission: "documents:read", section: "operation" },
   { label: "Dispensaciones", href: "/dispensaciones", icon: ClipboardPlus, permission: "dispensations:read", enabled: false, section: "operation" },
   { label: "Inventario", href: "/inventario", icon: Boxes, permission: "inventory:read", section: "operation" },
   { label: "Continuidad", href: "/continuidad", icon: HeartPulse, permission: "continuity:read", enabled: false, section: "operation" },
