@@ -2441,6 +2441,7 @@ html[data-theme="dark"] .patients-name-cell > i { color: #d9f5a1; background: #1
 html[data-theme="dark"] .patient-metric-button[aria-pressed="true"] { background: #17342d; border-color: #315b4d; }
 @media (max-width: 1180px) { .patients-metric-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
 @media (max-width: 980px) { .patient-demographic-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .patients-query-form { grid-template-columns: 1fr 1fr; } .patients-query-search { grid-column: 1/-1; } .patient-registration-scope, .patient-registration-section { grid-template-columns: 1fr; gap: 14px; } }
+@media (max-width: 900px) { .patient-form-grid-three { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 760px) {
   .patients-metric-grid { grid-template-columns: 1fr 1fr; }
   .patient-demographic-grid { grid-template-columns: 1fr; }
@@ -2469,15 +2470,24 @@ html[data-theme="dark"] .patient-metric-button[aria-pressed="true"] { background
   .patient-dialog-header .product-dialog-title p:last-child { display: none; }
   .patient-registration-form { padding: 14px 14px 0 !important; }
   .patient-registration-scope, .patient-registration-section { padding: 14px; }
-  .patient-scope-grid, .patient-form-grid, .patient-form-grid-three, .patient-confirmation-grid { grid-template-columns: 1fr; }
-  .patient-field-wide { grid-column: auto; }
-  .patient-scope-wide { grid-column: auto; }
-  .patient-active-check { margin-top: 0; }
+  .patient-confirmation-grid { grid-template-columns: 1fr; }
   .patient-dialog-footer { margin: 14px -14px 0; padding: 12px 14px; }
   .patient-dialog-footer > span { display: none; }
   .patient-dialog-footer > div { width: 100%; display: grid; grid-template-columns: 1fr 1fr; }
-  .patient-dialog-footer .button { width: 100%; }
+  .patient-dialog-footer .button { width: 100%; min-height: 46px; }
   .patient-scope-grid select, .patient-form-grid input, .patient-form-grid select { font-size: 16px; }
+}
+@media (max-width: 620px) {
+  .patient-dialog { max-height: 100dvh; border-radius: 18px 18px 0 0; }
+  .patient-dialog-header .product-dialog-title h2 { overflow-wrap: anywhere; font-size: 18px; }
+  .patient-registration-scope, .patient-registration-section { padding: 12px; gap: 12px; border-radius: 13px; }
+  .patient-scope-grid, .patient-form-grid, .patient-form-grid-three { grid-template-columns: 1fr; }
+  .patient-field-wide, .patient-scope-wide { grid-column: auto; }
+  .patient-active-check { margin-top: 0; }
+  .patient-scope-grid label > span, .patient-form-grid label > span { align-items: flex-start; flex-wrap: wrap; }
+}
+@media (max-width: 520px) {
+  .patient-dialog-footer > div { grid-template-columns: 1fr; }
 }
 @media (max-width: 430px) {
   .patients-metric-grid { grid-template-columns: 1fr; }

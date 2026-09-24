@@ -28,6 +28,8 @@ describe("EditPatientDialog", () => {
     const close = vi.fn();
     render(<EditPatientDialog branches={branches} onClose={close} patient={patient} />);
 
+    expect(screen.queryByLabelText("Teléfono verificado")).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Validación" })).not.toBeInTheDocument();
     expect(screen.getByText("Cédula actual: ***-*******-8")).toBeInTheDocument();
     expect(screen.getByText("Póliza actual: ***6789")).toBeInTheDocument();
     expect(await screen.findByLabelText("Cédula")).toHaveValue("00112345678");
@@ -67,6 +69,7 @@ describe("EditPatientDialog", () => {
     expect(body).toMatchObject({
       phone: "809-555-0199",
       active: false,
+      phoneVerified: true,
       governmentId: "40212345678",
       insuranceCard: "987654321",
     });

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Building2, Fingerprint, HeartPulse, IdCard, Pencil, Phone, ShieldCheck, X } from "lucide-react";
+import { Building2, Fingerprint, HeartPulse, IdCard, Pencil, Phone, X } from "lucide-react";
 import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import type { PatientListItem } from "@/modules/patients/patient-catalog";
 import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
@@ -61,7 +61,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: form.get("name"), governmentId, insuranceCard,
-            birthDate: form.get("birthDate"), phone, phoneVerified: form.get("phoneVerified") === "on",
+            birthDate: form.get("birthDate"), phone, phoneVerified: patient.phoneVerified,
             insurer: form.get("insurer"), followUpStatus: form.get("followUpStatus"),
             preferredContactChannel: form.get("preferredContactChannel"), branchId: form.get("branchId"),
             active: form.get("active") === "active",
@@ -110,10 +110,6 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
             <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue={patient.preferredContactChannel} name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>
             <label className="patient-field-wide"><span>Estado de seguimiento</span><select aria-label="Estado de seguimiento" defaultValue={patient.followUpStatus} name="followUpStatus"><option value="green">Verde · continuidad organizada</option><option value="yellow">Amarillo · requiere seguimiento</option><option value="red">Rojo · riesgo de interrupción</option><option value="clinical">Escalamiento profesional</option></select></label>
           </div>
-        </section>
-        <section className="patient-registration-section patient-registration-confirmations" aria-labelledby="edit-patient-validation-title">
-          <div className="patient-section-title"><span><ShieldCheck size={18} /></span><div><h3 id="edit-patient-validation-title">Validación</h3><p>Confirme solo cuando el número haya sido verificado.</p></div></div>
-          <div className="patient-confirmation-grid"><label className="patient-confirmation"><input aria-label="Teléfono verificado" defaultChecked={patient.phoneVerified} name="phoneVerified" type="checkbox" /><span><strong>Teléfono verificado</strong><small>El número pertenece al paciente.</small></span></label></div>
         </section>
         {error && <div className="staff-feedback staff-feedback-error" role="alert">{error}</div>}
         <footer className="patient-dialog-footer"><span><HeartPulse size={16} /> Los cambios de cédula o póliza quedarán en el historial protegido.</span><div><button className="button button-secondary" disabled={busy} onClick={onClose} type="button">Cancelar</button><button className="button button-primary" disabled={busy || identifiersLoading} type="submit"><Pencil size={16} /> {busy ? "Guardando…" : identifiersLoading ? "Consultando datos…" : "Guardar cambios"}</button></div></footer>
