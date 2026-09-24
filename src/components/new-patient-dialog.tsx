@@ -5,12 +5,15 @@ import { useRouter } from "next/navigation";
 import { Building2, Fingerprint, HeartPulse, IdCard, Phone, Plus, ShieldCheck, UserPlus, X } from "lucide-react";
 import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
+import { digitsOnly, formatPhoneNumber } from "@/shared/contact-format";
 
 export function NewPatientDialog({ branches }: { branches: InventoryBranch[] }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [governmentId, setGovernmentId] = useState("");
+  const [phone, setPhone] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -30,7 +33,7 @@ export function NewPatientDialog({ branches }: { branches: InventoryBranch[] }) 
       const governmentIdDigits = String(form.get("governmentId") ?? "").replace(/\D/g, "");
       const phoneDigits = String(form.get("phone") ?? "").replace(/\D/g, "");
       if (governmentIdDigits && governmentIdDigits.length !== 11) throw new Error("La cédula debe contener 11 dígitos");
-      if (!(phoneDigits.length === 10 || (phoneDigits.length === 11 && phoneDigits.startsWith("1")))) throw new Error("El teléfono debe contener 10 dígitos; puede incluir el código de país +1");
+      if (phoneDigits.length !== 10) throw new Error("El teléfono debe contener 10 dígitos");
       let response: Response;
       try {
         response = await fetch("/api/patients", {
@@ -82,7 +85,7 @@ export function NewPatientDialog({ branches }: { branches: InventoryBranch[] }) 
             <div className="patient-section-title"><span><IdCard size={18} /></span><div><h3 id="patient-identity-title">Datos del paciente</h3><p>Registre solamente información confirmada.</p></div></div>
             <div className="patient-form-grid">
               <label className="patient-field-wide"><span>Nombre completo <b>*</b></span><input aria-label="Nombre completo" autoComplete="name" maxLength={240} name="name" required /></label>
-              <label><span>Cédula del paciente <em>Opcional</em></span><input aria-describedby="patient-government-id-help" aria-label="Cédula del paciente" autoComplete="off" inputMode="numeric" maxLength={13} name="governmentId" placeholder="000-0000000-0" /><small id="patient-government-id-help">Debe contener exactamente 11 dígitos.</small></label>
+              <label><span>Cédula del paciente <em>Opcional</em></span><input aria-describedby="patient-government-id-help" aria-label="Cédula del paciente" autoComplete="off" inputMode="numeric" maxLength={11} name="governmentId" onChange={(event) => setGovernmentId(digitsOnly(event.target.value, 11))} placeholder="00112345678" value={governmentId} /><small id="patient-government-id-help">Debe contener exactamente 11 dígitos numéricos.</small></label>
               <label><span>Fecha de nacimiento <em>Opcional</em></span><input aria-label="Fecha de nacimiento" max="2099-12-31" min="1900-01-01" name="birthDate" type="date" /></label>
             </div>
           </section>
@@ -90,7 +93,7 @@ export function NewPatientDialog({ branches }: { branches: InventoryBranch[] }) 
           <section className="patient-registration-section" aria-labelledby="patient-contact-title">
             <div className="patient-section-title"><span><Phone size={18} /></span><div><h3 id="patient-contact-title">Contacto y cobertura</h3><p>Información para continuidad y comunicación autorizada.</p></div></div>
             <div className="patient-form-grid">
-              <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-describedby="patient-phone-help" aria-label="Teléfono" autoComplete="tel" inputMode="tel" maxLength={18} name="phone" placeholder="8095550000" required /><small id="patient-phone-help">10 dígitos; puede incluir el código de país +1.</small></label>
+              <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-describedby="patient-phone-help" aria-label="Teléfono" autoComplete="tel" inputMode="numeric" maxLength={12} name="phone" onChange={(event) => setPhone(formatPhoneNumber(event.target.value))} placeholder="809-555-0000" required value={phone} /><small id="patient-phone-help">Digite 10 números; se mostrará como 809-555-0000.</small></label>
               <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
               <label><span>Carnet <em>Opcional</em></span><input aria-label="Carnet" autoComplete="off" inputMode="numeric" maxLength={15} name="insuranceCard" placeholder="Número de carnet" /><small>Debe contener de 8 a 12 dígitos.</small></label>
               <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue="whatsapp" name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>

@@ -25,6 +25,7 @@ describe("PatientRecordProfile", () => {
     render(<PatientRecordProfile patient={patient} />);
     expect(screen.getByRole("heading", { name: "María Rodríguez" })).toBeInTheDocument();
     expect(screen.getByText("PAC-0001")).toBeInTheDocument();
+    expect(screen.getByText("809-555-0142")).toBeInTheDocument();
     expect(screen.getByText("Consentimiento vigente")).toBeInTheDocument();
     expect(screen.getByText("ARS SENASA")).toBeInTheDocument();
     expect(screen.getByText("Cédula ***-*******-8")).toBeInTheDocument();

@@ -17,6 +17,7 @@ import {
   UserRound,
 } from "lucide-react";
 import type { Patient } from "@/modules/patients/demo-patient";
+import { formatPhoneNumber } from "@/shared/contact-format";
 
 export function PatientProfile({ patient }: { patient: Patient }) {
   const treatment = patient.treatment;
@@ -34,7 +35,7 @@ export function PatientProfile({ patient }: { patient: Patient }) {
           </div>
           <div className="patient-meta-line">
             <span><UserRound size={14} /> Cédula {patient.document}</span>
-            <span><Phone size={14} /> {patient.phone}</span>
+            <span><Phone size={14} /> {formatPhoneNumber(patient.phone)}</span>
             <span><MapPin size={14} /> {patient.branch}</span>
           </div>
           <div className="patient-tags">

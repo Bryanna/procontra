@@ -141,7 +141,7 @@ describe("PatientsWorkspace", () => {
     const dialog = screen.getByRole("dialog", { name: "Editar paciente María Rodríguez" });
     expect(dialog).toBeInTheDocument();
     expect(within(dialog).getByLabelText("Nombre completo")).toHaveValue("María Rodríguez");
-    expect(within(dialog).getByLabelText("Teléfono")).toHaveValue("+1 809 555 0142");
+    expect(within(dialog).getByLabelText("Teléfono")).toHaveValue("809-555-0142");
     expect(within(dialog).getByText("PAC-0001")).toBeInTheDocument();
   });
 });

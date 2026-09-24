@@ -10,7 +10,7 @@ describe("patient registration", () => {
       governmentId: "001-1234567-8",
       insuranceCard: "123-45678-9",
       birthDate: "1985-04-12",
-      phone: "+1 (809) 555-0101",
+      phone: "809-555-0101",
       phoneVerified: true,
       insurer: "ARS SENASA",
       followUpStatus: "yellow",
@@ -23,7 +23,7 @@ describe("patient registration", () => {
       governmentId: "00112345678",
       insuranceCard: "123456789",
       birthDate: "1985-04-12",
-      phone: "+18095550101",
+      phone: "8095550101",
       phoneVerified: true,
       insurer: "ARS SENASA",
       followUpStatus: "yellow",
@@ -46,9 +46,9 @@ describe("patient registration", () => {
     expect(() => preparePatientCreate({ name: "Ana Castillo", phone: "8095550101", branchId: "22222222-2222-4222-8222-222222222222" }, branchIds)).toThrow("Sucursal de paciente inválida");
   });
 
-  it("accepts only a 10-digit Dominican phone with an optional +1 country code", () => {
+  it("accepts only a 10-digit Dominican phone", () => {
     expect(preparePatientCreate({ name: "Ana Castillo", phone: "(809) 555-0101", branchId: branchIds[0] }, branchIds).phone).toBe("8095550101");
-    expect(preparePatientCreate({ name: "Ana Castillo", phone: "+1 809 555 0101", branchId: branchIds[0] }, branchIds).phone).toBe("+18095550101");
+    expect(() => preparePatientCreate({ name: "Ana Castillo", phone: "+1 809 555 0101", branchId: branchIds[0] }, branchIds)).toThrow("Teléfono de paciente inválido");
   });
 
   it("prepares an editable patient record while preserving omitted protected identifiers", () => {

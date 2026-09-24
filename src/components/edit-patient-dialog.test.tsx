@@ -28,12 +28,14 @@ describe("EditPatientDialog", () => {
     const cardField = screen.getByLabelText("Nuevo carnet");
     expect(insurerField.closest("label")?.nextElementSibling).toBe(cardField.closest("label"));
     expect(screen.queryByText(/NSS/i)).not.toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "8095550199" } });
+    expect(screen.getByLabelText("Teléfono")).toHaveValue("809-555-0142");
+    fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "809x5550199" } });
+    expect(screen.getByLabelText("Teléfono")).toHaveValue("809-555-0199");
     fireEvent.change(screen.getByLabelText("Estado del paciente"), { target: { value: "inactive" } });
     fireEvent.click(screen.getByRole("button", { name: "Guardar cambios" }));
     await waitFor(() => expect(fetchMock).toHaveBeenCalledWith(`/api/patients/${patient.id}`, expect.objectContaining({ method: "PATCH" })));
     const body = JSON.parse(fetchMock.mock.calls[0][1].body);
-    expect(body).toMatchObject({ phone: "8095550199", active: false, governmentId: "", insuranceCard: "" });
+    expect(body).toMatchObject({ phone: "809-555-0199", active: false, governmentId: "", insuranceCard: "" });
     expect(refresh).toHaveBeenCalledOnce();
     expect(close).toHaveBeenCalledOnce();
   });

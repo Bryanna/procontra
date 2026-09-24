@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   if (reviewerError) return NextResponse.json({ error: "No fue posible guardar el revisor" }, { status: 500 });
   const normalized = String(body.whatsappNumber ?? "").replace(/\D/g, "");
   if (normalized) {
-    if (normalized.length < 10 || normalized.length > 15) return NextResponse.json({ error: "Número de WhatsApp inválido" }, { status: 400 });
+    if (normalized.length !== 10) return NextResponse.json({ error: "Número de WhatsApp inválido" }, { status: 400 });
     const { error } = await admin.schema("api").from("t_identidades_canales").upsert({
       f_uuid_perfil: profile.f_uuid, f_canal: "whatsapp", f_identificador_hash: createHash("sha256").update(normalized).digest("hex"),
       f_identificador_mascara: `***${normalized.slice(-4)}`, f_verificado: true, f_puede_enviar: true,

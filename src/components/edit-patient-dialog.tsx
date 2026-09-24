@@ -6,11 +6,14 @@ import { Building2, Fingerprint, HeartPulse, IdCard, Pencil, Phone, ShieldCheck,
 import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import type { PatientListItem } from "@/modules/patients/patient-catalog";
 import { acceptedPatientInsurers } from "@/modules/patients/patient-registration";
+import { digitsOnly, formatPhoneNumber } from "@/shared/contact-format";
 
 export function EditPatientDialog({ patient, branches, onClose }: { patient: PatientListItem; branches: InventoryBranch[]; onClose: () => void }) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [governmentId, setGovernmentId] = useState("");
+  const [phone, setPhone] = useState(() => formatPhoneNumber(patient.phone));
   const branchId = branches.find((item) => item.code === patient.branchCode)?.id ?? "";
 
   useEffect(() => {
@@ -33,7 +36,7 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
     const phoneDigits = phone.replace(/\D/g, "");
     try {
       if (governmentIdDigits && governmentIdDigits.length !== 11) throw new Error("La nueva cédula debe contener 11 dígitos");
-      if (!(phoneDigits.length === 10 || (phoneDigits.length === 11 && phoneDigits.startsWith("1")))) throw new Error("El teléfono debe contener 10 dígitos; puede incluir el código de país +1");
+      if (phoneDigits.length !== 10) throw new Error("El teléfono debe contener 10 dígitos");
       let response: Response;
       try {
         response = await fetch(`/api/patients/${patient.id}`, {
@@ -76,14 +79,14 @@ export function EditPatientDialog({ patient, branches, onClose }: { patient: Pat
           <div className="patient-section-title"><span><IdCard size={18} /></span><div><h3 id="edit-patient-identity-title">Datos del paciente</h3><p>Los identificadores nuevos sustituyen los actuales.</p></div></div>
           <div className="patient-form-grid">
             <label className="patient-field-wide"><span>Nombre completo <b>*</b></span><input aria-label="Nombre completo" defaultValue={patient.name} maxLength={240} name="name" required /></label>
-            <label><span>Nueva cédula <em>Opcional</em></span><input aria-label="Nueva cédula" inputMode="numeric" maxLength={13} name="governmentId" placeholder="Dejar vacío para conservar" /><small>{patient.governmentIdMask ? `Cédula actual: ${patient.governmentIdMask}` : "Cédula no registrada"}</small></label>
+            <label><span>Nueva cédula <em>Opcional</em></span><input aria-label="Nueva cédula" inputMode="numeric" maxLength={11} name="governmentId" onChange={(event) => setGovernmentId(digitsOnly(event.target.value, 11))} placeholder="Dejar vacío para conservar" value={governmentId} /><small>{patient.governmentIdMask ? `Cédula actual: ${patient.governmentIdMask}` : "Cédula no registrada"}</small></label>
             <label><span>Fecha de nacimiento <em>Opcional</em></span><input aria-label="Fecha de nacimiento" defaultValue={patient.birthDate ?? ""} max="2099-12-31" min="1900-01-01" name="birthDate" type="date" /></label>
           </div>
         </section>
         <section className="patient-registration-section" aria-labelledby="edit-patient-contact-title">
           <div className="patient-section-title"><span><Phone size={18} /></span><div><h3 id="edit-patient-contact-title">Contacto y cobertura</h3><p>Información activa para el seguimiento.</p></div></div>
           <div className="patient-form-grid">
-            <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-label="Teléfono" defaultValue={patient.phone} inputMode="tel" maxLength={18} name="phone" required /><small>10 dígitos; puede incluir +1.</small></label>
+            <label className="patient-field-wide"><span>Teléfono <b>*</b></span><input aria-label="Teléfono" inputMode="numeric" maxLength={12} name="phone" onChange={(event) => setPhone(formatPhoneNumber(event.target.value))} required value={phone} /><small>Digite 10 números; se mostrará como 809-555-0000.</small></label>
             <label><span>ARS / aseguradora <em>Opcional</em></span><select aria-label="ARS / aseguradora" defaultValue={patient.insurer ?? ""} name="insurer"><option value="">Sin ARS informada</option>{acceptedPatientInsurers.map((insurer) => <option key={insurer} value={insurer}>{insurer}</option>)}</select></label>
             <label><span>Nuevo carnet <em>Opcional</em></span><input aria-label="Nuevo carnet" inputMode="numeric" maxLength={15} name="insuranceCard" placeholder="Dejar vacío para conservar" /><small>{patient.insuranceCardMask ? `Carnet actual: ${patient.insuranceCardMask}` : "Carnet no registrado"}</small></label>
             <label><span>Canal preferido</span><select aria-label="Canal preferido" defaultValue={patient.preferredContactChannel} name="preferredContactChannel"><option value="whatsapp">WhatsApp</option><option value="call">Llamada</option></select></label>

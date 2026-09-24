@@ -8,6 +8,7 @@ describe("PatientProfile", () => {
 
     expect(screen.getByRole("heading", { name: "María Rodríguez" })).toBeInTheDocument();
     expect(screen.getByText("Cédula 001-1234567-8")).toBeInTheDocument();
+    expect(screen.getByText("809-555-0142")).toBeInTheDocument();
     expect(screen.getByText("Consentimiento vigente")).toBeInTheDocument();
   });
 

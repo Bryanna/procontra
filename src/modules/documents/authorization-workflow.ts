@@ -66,7 +66,7 @@ export function prepareInsuranceAuthorizationSubmission(input: InsuranceAuthoriz
   if (!/^[0-9a-f-]{36}$/i.test(branchId)) throw new Error("Sucursal inválida");
   if (insurerCode.length < 2 || insurerName.length < 2) throw new Error("ARS requerida");
   if (patientName.length < 3 || patientName.length > 240) throw new Error("Nombre de paciente inválido");
-  if (!/^\d{10,15}$/.test(phone)) throw new Error("Teléfono de paciente inválido");
+  if (!/^\d{10}$/.test(phone)) throw new Error("Teléfono de paciente inválido");
   if (governmentId && !/^\d{11}$/.test(governmentId)) throw new Error("Cédula de paciente inválida");
   if (insuranceCard && !/^\d{8,12}$/.test(insuranceCard)) throw new Error("Carnet de paciente inválido");
   if (authorizationNumber.length < 2 || authorizationNumber.length > 120) throw new Error("Número de autorización requerido");

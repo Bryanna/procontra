@@ -68,9 +68,7 @@ export function preparePatientCreate(input: PatientCreateInput, allowedBranchIds
   const governmentId = digits(input.governmentId);
   const insuranceCard = digits(input.insuranceCard);
   const birthDate = clean(input.birthDate);
-  const rawPhone = clean(input.phone);
-  const phoneDigits = digits(rawPhone);
-  const phone = phoneDigits.length === 11 && phoneDigits.startsWith("1") ? `+${phoneDigits}` : phoneDigits;
+  const phone = digits(input.phone);
   const insurer = clean(input.insurer);
   const followUpStatus = clean(input.followUpStatus) || "green";
   const preferredContactChannel = clean(input.preferredContactChannel) || "whatsapp";
@@ -80,7 +78,7 @@ export function preparePatientCreate(input: PatientCreateInput, allowedBranchIds
   if (governmentId && !/^[0-9]{11}$/.test(governmentId)) throw new Error("Cédula de paciente inválida");
   if (insuranceCard && !/^[0-9]{8,12}$/.test(insuranceCard)) throw new Error("Carnet de paciente inválido");
   if (birthDate && (!/^\d{4}-\d{2}-\d{2}$/.test(birthDate) || birthDate < "1900-01-01" || birthDate > new Date().toISOString().slice(0, 10))) throw new Error("Fecha de nacimiento inválida");
-  if (!(phoneDigits.length === 10 || (phoneDigits.length === 11 && phoneDigits.startsWith("1")))) throw new Error("Teléfono de paciente inválido");
+  if (!/^\d{10}$/.test(phone)) throw new Error("Teléfono de paciente inválido");
   if (!allowedBranchIds.includes(branchId)) throw new Error("Sucursal de paciente inválida");
   if (insurer && !acceptedPatientInsurers.includes(insurer as typeof acceptedPatientInsurers[number])) throw new Error("Aseguradora de paciente inválida");
   if (!patientFollowUpStatuses.includes(followUpStatus as PatientFollowUpStatus)) throw new Error("Estado de seguimiento inválido");

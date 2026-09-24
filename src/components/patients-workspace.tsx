@@ -8,6 +8,7 @@ import type { InventoryBranch } from "@/modules/inventory/inventory-catalog";
 import type { PatientFilter, PatientSearchResult, PatientSummary } from "@/modules/patients/patient-catalog";
 import { NewPatientDialog } from "./new-patient-dialog";
 import { EditPatientDialog } from "./edit-patient-dialog";
+import { formatPhoneNumber } from "@/shared/contact-format";
 
 function patientsUrl(input: { query: string; filter: PatientFilter; branch: string; page: number }) {
   const params = new URLSearchParams();
@@ -134,7 +135,7 @@ export function PatientsWorkspace({
           ) : result.items.map((patient) => (
             <div aria-label={`${patient.name} ${patient.code}`} className={`patients-live-row${canWrite ? " patients-editable-row" : ""}`} onDoubleClick={() => { if (canWrite) setEditingPatient(patient); }} onKeyDown={(event) => { if (canWrite && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); setEditingPatient(patient); } }} role="row" tabIndex={canWrite ? 0 : undefined} title={canWrite ? "Doble clic para editar" : undefined} key={patient.id}>
               {canWrite ? <span className="patients-name-cell" data-label="Paciente"><i>{patientInitials(patient.name)}</i><span className="table-cell-stack"><strong>{patient.name}</strong><small>{patient.code}</small></span></span> : <Link className="patients-name-cell" data-label="Paciente" href={`/pacientes/${patient.id}`}><i>{patientInitials(patient.name)}</i><span className="table-cell-stack"><strong>{patient.name}</strong><small>{patient.code}</small></span></Link>}
-              <span className="patients-contact-cell table-cell-stack" data-label="Contacto"><strong>{patient.phone}</strong><small>{[patient.governmentIdMask ? `Cédula ${patient.governmentIdMask}` : "", patient.insuranceCardMask ? `Carnet ${patient.insuranceCardMask}` : ""].filter(Boolean).join(" · ") || "Identificación no informada"}</small></span>
+              <span className="patients-contact-cell table-cell-stack" data-label="Contacto"><strong>{formatPhoneNumber(patient.phone)}</strong><small>{[patient.governmentIdMask ? `Cédula ${patient.governmentIdMask}` : "", patient.insuranceCardMask ? `Carnet ${patient.insuranceCardMask}` : ""].filter(Boolean).join(" · ") || "Identificación no informada"}</small></span>
               <span className="patients-text-cell" data-label="Aseguradora">{patient.insurer || "No informada"}</span>
               <span className="patients-text-cell" data-label="Sucursal">{patient.branch ? `${patient.branch}${patient.branchCode ? ` ${patient.branchCode}` : ""}` : "Sin sucursal preferida"}</span>
               <span className="patients-status-cell" data-label="Estado"><span className={`status ${patient.active ? "status-emerald" : "status-slate"}`}>{patient.active ? "Activo" : "Inactivo"}</span></span>

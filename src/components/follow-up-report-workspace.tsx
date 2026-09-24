@@ -2,6 +2,7 @@
 
 import { CalendarClock, CheckCircle2, FileDown, PhoneCall, Search, ShieldAlert, TestTube2, UsersRound } from "lucide-react";
 import type { FollowUpReportFilters, FollowUpReportResult } from "@/modules/reporting/follow-up-report-repository";
+import { formatPhoneNumber } from "@/shared/contact-format";
 
 interface BranchOption { id: string; code: string; name: string }
 interface Props { report: FollowUpReportResult; filters: FollowUpReportFilters; branches: BranchOption[] }
@@ -58,7 +59,7 @@ export function FollowUpReportWorkspace({ report, filters, branches }: Props) {
       </form>
 
       {report.items.length === 0 ? <div className="followup-empty"><CalendarClock size={28}/><strong>No hay seguimientos para estos filtros.</strong><span>Cambie el período o el tipo de datos para generar el reporte.</span></div> : <div className="followup-table-wrap"><table className="followup-table report-table" aria-label="Reporte de planes de seguimiento"><thead><tr><th>Paciente</th><th>Sucursal / ARS</th><th>Tratamiento</th><th>Fechas</th><th>Resultado</th><th>Estado / origen</th></tr></thead><tbody>{report.items.map((item) => <tr key={item.id}>
-        <td data-label="Paciente"><strong>{item.patientName}</strong><span>{item.phone}</span>{item.isTest && <small className="report-test-badge"><TestTube2 size={12}/>Datos de prueba</small>}</td>
+        <td data-label="Paciente"><strong>{item.patientName}</strong><span>{formatPhoneNumber(item.phone)}</span>{item.isTest && <small className="report-test-badge"><TestTube2 size={12}/>Datos de prueba</small>}</td>
         <td data-label="Sucursal / ARS"><strong>{item.branch ? `${item.branch} ${item.branchCode ?? ""}` : "Sin sucursal"}</strong><span>{item.insurer}</span></td>
         <td data-label="Tratamiento"><strong>{item.medicines}</strong><span>{item.doctor ?? "Médico no registrado"}</span></td>
         <td data-label="Fechas"><strong>Contacto: {formatDate(item.contactDate)}</strong><span>Próxima compra: {formatDate(item.nextPurchaseDate)}</span><small>Primera compra: {formatDate(item.firstPurchaseDate)}</small></td>

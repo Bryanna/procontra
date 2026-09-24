@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Building2, CalendarDays, ContactRound, IdCard, MessageCircle, Phone, ShieldCheck, UserRound } from "lucide-react";
 import type { PatientListItem } from "@/modules/patients/patient-catalog";
+import { formatPhoneNumber } from "@/shared/contact-format";
 
 export function PatientRecordProfile({ patient }: { patient: PatientListItem }) {
   const initials = patient.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
@@ -13,7 +14,7 @@ export function PatientRecordProfile({ patient }: { patient: PatientListItem }) 
         <div className="patient-avatar-large">{initials}</div>
         <div className="patient-identity">
           <div className="patient-title-line"><h1>{patient.name}</h1><span className={`status ${patient.active ? "status-emerald" : "status-slate"}`}>{patient.active ? "Activo" : "Inactivo"}</span></div>
-          <div className="patient-meta-line"><span><UserRound size={14} /> {patient.code}</span><span><Phone size={14} /> {patient.phone}</span><span><Building2 size={14} /> {patient.branch ? `${patient.branch}${patient.branchCode ? ` ${patient.branchCode}` : ""}` : "Sin sucursal preferida"}</span></div>
+          <div className="patient-meta-line"><span><UserRound size={14} /> {patient.code}</span><span><Phone size={14} /> {formatPhoneNumber(patient.phone)}</span><span><Building2 size={14} /> {patient.branch ? `${patient.branch}${patient.branchCode ? ` ${patient.branchCode}` : ""}` : "Sin sucursal preferida"}</span></div>
           <div className="patient-tags"><span><ShieldCheck size={13} /> {patient.consentStatus === "active" ? "Consentimiento vigente" : "Sin consentimiento vigente"}</span><span>{patient.insurer || "Aseguradora no informada"}</span><span><CalendarDays size={13} /> Registrado {new Intl.DateTimeFormat("es-DO", { dateStyle: "medium", timeZone: "UTC" }).format(new Date(patient.joinedAt))}</span></div>
         </div>
       </section>

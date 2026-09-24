@@ -19,6 +19,12 @@ describe("Documents workspace", () => {
 
     for (const label of ["Nombre del paciente", "Cédula", "Carnet", "Teléfono", "Número de autorización", "Fecha de autorización", "Prescriptor"])
       expect(screen.getByLabelText(label)).toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText("Cédula"), { target: { value: "001A1234567-8" } });
+    fireEvent.change(screen.getByLabelText("Teléfono"), { target: { value: "809a5550101" } });
+    expect(screen.getByLabelText("Cédula")).toHaveValue("00112345678");
+    expect(screen.getByLabelText("Cédula")).toHaveAttribute("maxlength", "11");
+    expect(screen.getByLabelText("Teléfono")).toHaveValue("809-555-0101");
+    expect(screen.getByLabelText("Teléfono")).toHaveAttribute("inputmode", "numeric");
     expect(screen.getByRole("checkbox", { name: "Documento indica AUTORIZADO" })).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: "Documento indica uso continuo" })).toBeInTheDocument();
     expect(screen.getByRole("checkbox", { name: "Paciente autorizó el seguimiento" })).toBeInTheDocument();
